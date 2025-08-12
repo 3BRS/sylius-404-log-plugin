@@ -1,9 +1,9 @@
 {% set maxLength = 50 %}
 
 <div class="ui label" title="{{ data }}">
-    {% if data|length > maxLength %}
-        {{ data|slice(0, maxLength) }}...
+    {% if data.urlSlug|length > maxLength %}
+        <span title="{{ data.urlSlug }}">{{ data.urlSlug|slice(0, maxLength) }}{{ 'three_brs_sylius_404_log_plugin.ui.truncated'|trans }}</span>
     {% else %}
-        {{ data }}
+        {{ data.urlSlug }}
     {% endif %}
 </div>

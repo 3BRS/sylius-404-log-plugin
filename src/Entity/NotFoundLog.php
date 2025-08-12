@@ -52,6 +52,11 @@ class NotFoundLog implements NotFoundLogInterface
         $this->createdAt = new \DateTimeImmutable();
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     public function getUrlDomain(): string
     {
         return $this->urlDomain;
@@ -100,15 +105,5 @@ class NotFoundLog implements NotFoundLogInterface
     public function setCreatedAt(\DateTimeImmutable $createdAt): void
     {
         $this->createdAt = $createdAt;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
     }
 }

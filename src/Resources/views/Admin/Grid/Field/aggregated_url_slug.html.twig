@@ -1,0 +1,13 @@
+{% set maxLength = 50 %}
+
+<div class="ui label" title="{{ data.urlSlug }}">
+    {% if data.urlSlug|length > maxLength %}
+        {{ data.urlSlug|slice(0, maxLength) }}{{ 'three_brs_sylius_404_log_plugin.ui.truncated'|trans }}
+    {% else %}
+        {{ data.urlSlug }}
+    {% endif %}
+</div>
+
+<a href="{{ path('three_brs_sylius_404_log_plugin_admin_aggregated_log_details') }}?domain={{ data.urlDomain|url_encode }}&slug={{ data.urlSlug|url_encode }}" class="ui mini icon button" title="{{ 'three_brs_sylius_404_log_plugin.ui.show_details'|trans }}">
+    <i class="eye icon"></i>
+</a>

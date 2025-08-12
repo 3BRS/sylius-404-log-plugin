@@ -1,14 +1,12 @@
-{% if data %}
+{% if data.userAgent %}
     {% set maxLength = 60 %}
-    <div class="ui tiny label" title="{{ data }}">
-        <i class="computer icon"></i>
-        {% if data|length > maxLength %}
-            {{ data|slice(0, maxLength) }}...
+    <div class="ui tiny label" title="{{ data.userAgent }}">
+        {% if data.userAgent|length > maxLength %}
+            {{ data.userAgent|slice(0, maxLength) }}{{ 'three_brs_sylius_404_log_plugin.ui.truncated'|trans }}
         {% else %}
-            {{ data }}
+            {{ data.userAgent }}
         {% endif %}
     </div>
 {% else %}
     <span class="ui grey text">-</span>
 {% endif %}
-

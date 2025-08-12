@@ -1,15 +1,40 @@
 three_brs_sylius_404_log_plugin:
     ui:
-        not_found_logs: 404 Logs
-        administration: Administration
-        id: ID
-        url_domain: Domain
-        url_slug: URL Path
-        query_string: Query String
-        user_agent: User Agent
-        full_url: Full URL
-        actions: Actions
-        show_details: Show Details
-        delete_log: Delete Log
-        no_query_string: No query string
+        not_found_logs: "404 Logs"
+        aggregated_logs: "Aggregated 404 Logs"
+        id: "ID"
+        url_domain: "Domain"
+        url_slug: "URL Path"
+        query_string: "Query String"
+        user_agent: "User Agent"
+        created_at: "Created At"
+        count: "Count"
+        last_occurrence: "Last Occurrence"
+        show_details: "Show Details"
+        details: "Details"
+        total_occurrences: "Total Occurrences"
+        first_occurrence: "First Occurrence"
+        recent_logs: "Recent Logs"
+        delete_log: "Delete Log"
+        no_query_string: "No query string"
         truncated: "..."
+        back_to_list: "Back to list"
+        domain_and_path: "Domain & Path"
+        error_statistics: "Error Statistics"
+        view_all_logs: "View all logs"
+        logs_over_time: "Logs Over Time"
+        number_of_errors: "Number of Errors"
+        last_30_days: "Last 30 Days"
+        date: "Date"
+        no_logs_found: "No logs found"
+        filter_by_domain: "Filter by domain..."
+        filter_by_url_path: "Filter by URL path..."
+        min_count: "Min Count"
+        max_count: "Max Count"
+        min_occurrences: "Min occurrences..."
+        max_occurrences: "Max occurrences..."
+        filtered_results: "Filtered Results"
+        no_results_for_filters: "No results found for current filters"
+        try_different_filters: "Try adjusting your filters"
+        confirm_deletion: "Are you sure you want to delete all logs for this URL? This action cannot be undone."
+        delete_all_logs: "Delete All Logs"

@@ -1,0 +1,156 @@
+{% extends '@SyliusAdmin/layout.html.twig' %}
+
+{% block title %}{{ 'three_brs_sylius_404_log_plugin.ui.aggregated_logs'|trans }} {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="ui stackable two column grid">
+    <div class="column">
+        <h1 class="ui header">
+            <i class="chart bar outline icon"></i>
+            <div class="content">
+                {{ 'three_brs_sylius_404_log_plugin.ui.aggregated_logs'|trans }}
+                <div class="sub header">{{ 'three_brs_sylius_404_log_plugin.ui.error_statistics'|trans }}</div>
+            </div>
+        </h1>
+    </div>
+    <div class="right aligned column">
+        <a href="{{ path('three_brs_sylius_404_log_plugin_admin_not_found_log_index') }}" class="ui labeled icon button">
+            <i class="list icon"></i>
+            {{ 'three_brs_sylius_404_log_plugin.ui.not_found_logs'|trans }}
+        </a>
+    </div>
+</div>
+
+<div class="ui segment">
+    <div class="ui styled fluid accordion">
+        <div class="title {% if filters.domain or filters.urlPath or filters.minCount or filters.maxCount %}active{% endif %}">
+            <i class="dropdown icon"></i>
+            {{ 'sylius.ui.filters'|trans }}
+        </div>
+        <div class="content {% if filters.domain or filters.urlPath or filters.minCount or filters.maxCount %}active{% endif %}">
+            <form class="ui form" method="GET">
+                <div class="four fields">
+                    <div class="field">
+                        <label>{{ 'three_brs_sylius_404_log_plugin.ui.url_domain'|trans }}</label>
+                        <input type="text" name="domain" value="{{ filters.domain }}" placeholder="{{ 'three_brs_sylius_404_log_plugin.ui.filter_by_domain'|trans }}">
+                    </div>
+                    <div class="field">
+                        <label>{{ 'three_brs_sylius_404_log_plugin.ui.url_slug'|trans }}</label>
+                        <input type="text" name="urlPath" value="{{ filters.urlPath }}" placeholder="{{ 'three_brs_sylius_404_log_plugin.ui.filter_by_url_path'|trans }}">
+                    </div>
+                    <div class="field">
+                        <label>{{ 'three_brs_sylius_404_log_plugin.ui.min_count'|trans }}</label>
+                        <input type="number" name="minCount" value="{{ filters.minCount }}" placeholder="{{ 'three_brs_sylius_404_log_plugin.ui.min_occurrences'|trans }}" min="1">
+                    </div>
+                    <div class="field">
+                        <label>{{ 'three_brs_sylius_404_log_plugin.ui.max_count'|trans }}</label>
+                        <input type="number" name="maxCount" value="{{ filters.maxCount }}" placeholder="{{ 'three_brs_sylius_404_log_plugin.ui.max_occurrences'|trans }}" min="1">
+                    </div>
+                </div>
+                <button type="submit" class="ui labeled icon primary button">
+                    <i class="filter icon"></i>
+                    {{ 'sylius.ui.filter'|trans }}
+                </button>
+                <a href="{{ path('three_brs_sylius_404_log_plugin_admin_aggregated_log_index') }}" class="ui button">
+                    <i class="remove icon"></i>
+                    {{ 'sylius.ui.clear'|trans }}
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if filters.domain or filters.urlPath or filters.minCount or filters.maxCount %}
+    <div class="ui info message">
+        <div class="header">
+            {{ 'three_brs_sylius_404_log_plugin.ui.filtered_results'|trans }}
+        </div>
+        <ul class="list">
+            {% if filters.domain %}
+                <li>{{ 'three_brs_sylius_404_log_plugin.ui.url_domain'|trans }}: <strong>{{ filters.domain }}</strong></li>
+            {% endif %}
+            {% if filters.urlPath %}
+                <li>{{ 'three_brs_sylius_404_log_plugin.ui.url_slug'|trans }}: <strong>{{ filters.urlPath }}</strong></li>
+            {% endif %}
+            {% if filters.minCount %}
+                <li>{{ 'three_brs_sylius_404_log_plugin.ui.min_count'|trans }}: <strong>{{ filters.minCount }}</strong></li>
+            {% endif %}
+            {% if filters.maxCount %}
+                <li>{{ 'three_brs_sylius_404_log_plugin.ui.max_count'|trans }}: <strong>{{ filters.maxCount }}</strong></li>
+            {% endif %}
+        </ul>
+    </div>
+{% endif %}
+
+{% if aggregatedData|length > 0 %}
+    <table class="ui stackable celled table">
+        <thead>
+            <tr>
+                <th>{{ 'three_brs_sylius_404_log_plugin.ui.url_domain'|trans }}</th>
+                <th>{{ 'three_brs_sylius_404_log_plugin.ui.url_slug'|trans }}</th>
+                <th class="center aligned">{{ 'three_brs_sylius_404_log_plugin.ui.count'|trans }}</th>
+                <th>{{ 'three_brs_sylius_404_log_plugin.ui.last_occurrence'|trans }}</th>
+                <th class="center aligned">{{ 'sylius.ui.actions'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in aggregatedData %}
+                <tr>
+                    <td><strong>{{ item.urlDomain }}</strong></td>
+                    <td>
+                        <div class="ui small label" title="{{ item.urlSlug }}">
+                            {% if item.urlSlug|length > 50 %}
+                                {{ item.urlSlug|slice(0, 50) }}...
+                            {% else %}
+                                {{ item.urlSlug }}
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td class="center aligned">
+                        <span class="ui {{ item.logCount > 10 ? 'red' : (item.logCount > 5 ? 'orange' : 'blue') }} circular label">
+                            {{ item.logCount }}
+                        </span>
+                    </td>
+                    <td>{{ item.lastOccurrence|date('d.m.Y H:i:s') }}</td>
+                    <td class="center aligned">
+                        <a href="{{ path('three_brs_sylius_404_log_plugin_admin_aggregated_log_details', {
+                            'domain': item.urlDomain,
+                            'slug': item.urlSlug
+                        }) }}" class="ui labeled icon button">
+                            <i class="eye icon"></i>
+                            {{ 'three_brs_sylius_404_log_plugin.ui.show_details'|trans }}
+                        </a>
+                        <a href="{{ path('three_brs_sylius_404_log_plugin_admin_aggregated_log_delete_all', {
+                            'domain': item.urlDomain,
+                            'slug': item.urlSlug
+                        }) }}" class="ui labeled icon red button" onclick="return confirm('{{ 'three_brs_sylius_404_log_plugin.ui.confirm_deletion'|trans }}')">
+                            <i class="trash icon"></i>
+                            {{ 'three_brs_sylius_404_log_plugin.ui.delete_all_logs'|trans }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="ui icon message">
+        <i class="inbox icon"></i>
+        <div class="content">
+            <div class="header">
+                {% if filters.domain or filters.urlPath or filters.minCount or filters.maxCount %}
+                    {{ 'three_brs_sylius_404_log_plugin.ui.no_results_for_filters'|trans }}
+                {% else %}
+                    {{ 'sylius.ui.no_results_to_display'|trans }}
+                {% endif %}
+            </div>
+            <p>
+                {% if filters.domain or filters.urlPath or filters.minCount or filters.maxCount %}
+                    {{ 'three_brs_sylius_404_log_plugin.ui.try_different_filters'|trans }}.
+                {% else %}
+                    {{ 'No 404 logs found'|trans }}.
+                {% endif %}
+            </p>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

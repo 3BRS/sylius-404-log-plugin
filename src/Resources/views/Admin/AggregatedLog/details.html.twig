@@ -1,0 +1,203 @@
+{% extends '@SyliusAdmin/layout.html.twig' %}
+
+{% block title %}{{ 'three_brs_sylius_404_log_plugin.ui.details'|trans }} - {{ domain }}{{ slug }} {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="ui stackable grid">
+    <div class="sixteen wide column">
+        <div class="ui segment">
+            <h2 class="ui dividing header">
+                <i class="chart bar outline icon"></i>
+                {{ 'three_brs_sylius_404_log_plugin.ui.details'|trans }}
+            </h2>
+
+            <div class="ui stackable two column grid">
+                <div class="column">
+                    <div class="ui statistics">
+                        <div class="statistic">
+                            <div class="value">{{ stats.totalCount }}</div>
+                            <div class="label">{{ 'three_brs_sylius_404_log_plugin.ui.total_occurrences'|trans }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right aligned column">
+                    <a href="{{ path('three_brs_sylius_404_log_plugin_admin_aggregated_log_details_delete_all', {
+                        'domain': domain,
+                        'slug': slug
+                    }) }}" class="ui labeled icon red button" onclick="return confirm('{{ 'three_brs_sylius_404_log_plugin.ui.confirm_deletion'|trans }}')">
+                        <i class="trash icon"></i>
+                        {{ 'three_brs_sylius_404_log_plugin.ui.delete_all_logs'|trans }}
+                    </a>
+                </div>
+            </div>
+
+            <table class="ui celled table">
+                <tbody>
+                    <tr>
+                        <td><strong>{{ 'three_brs_sylius_404_log_plugin.ui.url_domain'|trans }}</strong></td>
+                        <td>{{ domain }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>{{ 'three_brs_sylius_404_log_plugin.ui.url_slug'|trans }}</strong></td>
+                        <td><code>{{ slug }}</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>{{ 'three_brs_sylius_404_log_plugin.ui.first_occurrence'|trans }}</strong></td>
+                        <td>{{ stats.firstOccurrence|date('d.m.Y H:i:s') }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>{{ 'three_brs_sylius_404_log_plugin.ui.last_occurrence'|trans }}</strong></td>
+                        <td>{{ stats.lastOccurrence|date('d.m.Y H:i:s') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="sixteen wide column">
+        <div class="ui segment">
+            <h3 class="ui dividing header">
+                <i class="chart line icon"></i>
+                {{ 'three_brs_sylius_404_log_plugin.ui.logs_over_time'|trans }}
+            </h3>
+
+            <div style="position: relative; height: 400px; width: 100%;">
+                <canvas id="logsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="sixteen wide column">
+        <div class="ui segment">
+            <h3 class="ui dividing header">
+                <i class="list icon"></i>
+                {{ 'three_brs_sylius_404_log_plugin.ui.recent_logs'|trans }}
+            </h3>
+
+            {% if logs|length > 0 %}
+                <table class="ui celled table">
+                    <thead>
+                        <tr>
+                            <th>{{ 'three_brs_sylius_404_log_plugin.ui.created_at'|trans }}</th>
+                            <th>{{ 'three_brs_sylius_404_log_plugin.ui.query_string'|trans }}</th>
+                            <th>{{ 'three_brs_sylius_404_log_plugin.ui.user_agent'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs|slice(0, 10) %}
+                            <tr>
+                                <td>{{ log.createdAt|date('d.m.Y H:i:s') }}</td>
+                                <td>
+                                    {% if log.queryString %}
+                                        <div class="ui small label" title="{{ log.queryString }}">
+                                            {% if log.queryString|length > 30 %}
+                                                {{ log.queryString|slice(0, 30) }}...
+                                            {% else %}
+                                                {{ log.queryString }}
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <span class="ui grey text">{{ 'three_brs_sylius_404_log_plugin.ui.no_query_string'|trans }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if log.userAgent %}
+                                        <div class="ui tiny label" title="{{ log.userAgent }}">
+                                            {% if log.userAgent|length > 40 %}
+                                                {{ log.userAgent|slice(0, 40) }}...
+                                            {% else %}
+                                                {{ log.userAgent }}
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <span class="ui grey text">-</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                {% if logs|length > 10 %}
+                    <div class="ui info message">
+                        <i class="info circle icon"></i>
+                        {{ 'Showing 10 most recent logs out of'|trans }} {{ logs|length }} {{ 'total'|trans }}.
+                        <a href="{{ path('three_brs_sylius_404_log_plugin_admin_not_found_log_index') }}?criteria[urlDomain][type]=contains&criteria[urlDomain][value]={{ domain|url_encode }}&criteria[urlSlug][type]=equal&criteria[urlSlug][value]={{ slug|url_encode }}" class="ui mini primary button" style="margin-left: 10px;">
+                            <i class="external link icon"></i>
+                            {{ 'three_brs_sylius_404_log_plugin.ui.view_all_logs'|trans }}
+                        </a>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="ui placeholder segment">
+                    <div class="ui icon header">
+                        <i class="search icon"></i>
+                        {{ 'three_brs_sylius_404_log_plugin.ui.no_logs_found'|trans }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('logsChart').getContext('2d');
+
+    const chartData = {{ chartData|json_encode|raw }};
+
+    const labels = chartData.map(item => {
+        const date = new Date(item.date);
+        return date.toLocaleDateString('cs-CZ', {
+            day: '2-digit',
+            month: '2-digit'
+        });
+    });
+
+    const data = chartData.map(item => item.count);
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '{{ 'three_brs_sylius_404_log_plugin.ui.number_of_errors'|trans }}',
+                data: data,
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                tension: 0.1,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: '{{ 'three_brs_sylius_404_log_plugin.ui.logs_over_time'|trans }} ({{ 'three_brs_sylius_404_log_plugin.ui.last_30_days'|trans }})'
+                },
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: '{{ 'three_brs_sylius_404_log_plugin.ui.date'|trans }}'
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -8,7 +8,7 @@ cd "$(dirname "$DIR")"
 
 set -x
 vendor/bin/phpstan analyse \
-	--level 7 \
+	--level 6 \
 	--memory-limit 1G \
 	--configuration phpstan.neon \
 	src

@@ -1,18 +1,61 @@
+parameters:
+    three_brs_sylius_404_log_plugin.skip_patterns:
+        - '/admin'
+        - '/api'
+        - '/_'
+
 services:
-    _defaults:
-        public: false
-        autowire: false
-        autoconfigure: false
-
-    ThreeBRS\Sylius404LogPlugin\EventListener\ExceptionLoggerListener:
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception }
+    sylius.repository.three_brs_sylius_404_log_plugin_not_found_log:
+        class: ThreeBRS\Sylius404LogPlugin\Repository\NotFoundLogRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
         arguments:
-            $entityManager: '@doctrine.orm.entity_manager'
+            - ThreeBRS\Sylius404LogPlugin\Entity\NotFoundLog
 
-
-    ThreeBRS\Sylius404LogPlugin\Menu\AdminMenuListener:
+    three_brs_sylius_404_log_plugin.grid.aggregated_log_data_provider:
+        class: ThreeBRS\Sylius404LogPlugin\Grid\AggregatedLogDataProvider
+        arguments:
+            - '@sylius.repository.three_brs_sylius_404_log_plugin_not_found_log'
         tags:
-            -   name: kernel.event_listener
-                event: sylius.menu.admin.main
-                method: addAdminMenuItems
+            - { name: sylius.grid_driver, alias: three_brs_sylius_404_log_plugin.grid.aggregated_log_data_provider }
+
+    three_brs_sylius_404_log_plugin.controller.aggregated_log_details:
+        class: ThreeBRS\Sylius404LogPlugin\Controller\AggregatedLogDetailsController
+        arguments:
+            - '@sylius.repository.three_brs_sylius_404_log_plugin_not_found_log'
+            - '@doctrine.orm.entity_manager'
+        calls:
+            - [setContainer, ['@service_container']]
+        tags:
+            - { name: controller.service_arguments }
+
+    three_brs_sylius_404_log_plugin.controller.aggregated_log:
+        class: ThreeBRS\Sylius404LogPlugin\Controller\AggregatedLogController
+        arguments:
+            - '@sylius.repository.three_brs_sylius_404_log_plugin_not_found_log'
+            - '@doctrine.orm.entity_manager'
+        calls:
+            - [setContainer, ['@service_container']]
+        tags:
+            - { name: controller.service_arguments }
+
+    three_brs_sylius_404_log_plugin.event_listener.exception_logger:
+        class: ThreeBRS\Sylius404LogPlugin\EventListener\ExceptionLoggerListener
+        arguments:
+            - '@logger'
+            - '@doctrine.orm.entity_manager'
+            - '@three_brs_sylius_404_log_plugin.factory.not_found_log'
+            - '%three_brs_sylius_404_log_plugin.skip_patterns%'
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: -1 }
+
+    three_brs_sylius_404_log_plugin.menu.admin_menu_listener:
+        class: ThreeBRS\Sylius404LogPlugin\Menu\AdminMenuListener
+        tags:
+            - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItems }
+
+    three_brs_sylius_404_log_plugin.fixture.not_found_log:
+        class: ThreeBRS\Sylius404LogPlugin\Fixture\NotFoundLogFixture
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: sylius_fixtures.fixture }

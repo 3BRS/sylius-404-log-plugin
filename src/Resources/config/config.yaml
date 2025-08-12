@@ -1,9 +1,11 @@
+# Sylius Resource Configuration
 sylius_resource:
     resources:
         three_brs_sylius_404_log_plugin.not_found_log:
             driver: doctrine/orm
             classes:
                 model: ThreeBRS\Sylius404LogPlugin\Entity\NotFoundLog
+                repository: ThreeBRS\Sylius404LogPlugin\Repository\NotFoundLogRepository
 
 sylius_grid:
     grids:
@@ -11,7 +13,9 @@ sylius_grid:
             driver:
                 name: doctrine/orm
                 options:
-                    class: "%three_brs_sylius_404_log_plugin.model.not_found_log.class%"
+                    class: ThreeBRS\Sylius404LogPlugin\Entity\NotFoundLog
+                    repository:
+                        method: createQueryBuilderForGrid
             sorting:
                 createdAt: desc
             fields:
@@ -24,27 +28,23 @@ sylius_grid:
                     label: three_brs_sylius_404_log_plugin.ui.url_domain
                     sortable: true
                 urlSlug:
-                    type: twig
+                    type: string
                     label: three_brs_sylius_404_log_plugin.ui.url_slug
                     sortable: true
-                    options:
-                        template: "@ThreeBRSSylius404LogPlugin/Admin/Grid/Field/url_slug.html.twig"
                 queryString:
-                    type: twig
+                    type: string
                     label: three_brs_sylius_404_log_plugin.ui.query_string
                     sortable: false
-                    options:
-                        template: "@ThreeBRSSylius404LogPlugin/Admin/Grid/Field/query_string.html.twig"
                 userAgent:
-                    type: twig
+                    type: string
                     label: three_brs_sylius_404_log_plugin.ui.user_agent
                     sortable: false
-                    options:
-                        template: "@ThreeBRSSylius404LogPlugin/Admin/Grid/Field/user_agent.html.twig"
                 createdAt:
                     type: datetime
-                    label: sylius.ui.date
+                    label: three_brs_sylius_404_log_plugin.ui.created_at
                     sortable: true
+                    options:
+                        format: 'd.m.Y H:i:s'
             filters:
                 urlDomain:
                     type: string
@@ -52,16 +52,77 @@ sylius_grid:
                 urlSlug:
                     type: string
                     label: three_brs_sylius_404_log_plugin.ui.url_slug
-                queryString:
-                    type: string
-                    label: three_brs_sylius_404_log_plugin.ui.query_string
-                userAgent:
-                    type: string
-                    label: three_brs_sylius_404_log_plugin.ui.user_agent
                 createdAt:
                     type: date
-                    label: sylius.ui.date
+                    label: three_brs_sylius_404_log_plugin.ui.created_at
             actions:
                 item:
                     delete:
                         type: delete
+
+        # Grid pro agregované logy
+        three_brs_sylius_admin_404_log_plugin_aggregated:
+            driver:
+                name: three_brs_sylius_404_log_plugin.grid.aggregated_log_data_provider
+            fields:
+                urlDomain:
+                    type: string
+                    label: three_brs_sylius_404_log_plugin.ui.url_domain
+                    sortable: true
+                urlSlug:
+                    type: string
+                    label: three_brs_sylius_404_log_plugin.ui.url_slug
+                    sortable: true
+                count:
+                    type: string
+                    label: three_brs_sylius_404_log_plugin.ui.count
+                    sortable: true
+                lastOccurrence:
+                    type: datetime
+                    label: three_brs_sylius_404_log_plugin.ui.last_occurrence
+                    sortable: true
+                    options:
+                        format: 'd.m.Y H:i:s'
+            filters:
+                urlDomain:
+                    type: string
+                    label: three_brs_sylius_404_log_plugin.ui.url_domain
+                    options:
+                        fields: [urlDomain]
+                urlSlug:
+                    type: string
+                    label: three_brs_sylius_404_log_plugin.ui.url_slug
+                    options:
+                        fields: [urlSlug]
+                minCount:
+                    type: string
+                    label: three_brs_sylius_404_log_plugin.ui.min_count
+                    options:
+                        fields: [count]
+                maxCount:
+                    type: string
+                    label: three_brs_sylius_404_log_plugin.ui.max_count
+                    options:
+                        fields: [count]
+            actions:
+                item:
+                    show_details:
+                        type: show
+                        label: three_brs_sylius_404_log_plugin.ui.show_details
+                        options:
+                            link:
+                                route: three_brs_sylius_404_log_plugin_admin_aggregated_log_details
+                                parameters:
+                                    domain: resource.urlDomain
+                                    slug: resource.urlSlug
+
+
+# Sylius Fixtures configuration for plugin
+sylius_fixtures:
+    suites:
+        default:
+            fixtures:
+                three_brs_404_not_found_log:
+                    options:
+                        amount: 500
+                        domains: ['example.com', 'shop.local', 'test.local']

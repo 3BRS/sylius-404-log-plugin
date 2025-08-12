@@ -1,14 +1,12 @@
-{% if data %}
-    {% set maxLength = 100 %}
-    <div class="ui small label" title="{{ data }}">
-        <i class="search icon"></i>
-        {% if data|length > maxLength %}
-            {{ data|slice(0, maxLength) }}...
+{% if data.queryString %}
+    {% set maxLength = 40 %}
+    <div class="ui small label" title="{{ data.queryString }}">
+        {% if data.queryString|length > maxLength %}
+            {{ data.queryString|slice(0, maxLength) }}{{ 'three_brs_sylius_404_log_plugin.ui.truncated'|trans }}
         {% else %}
-            {{ data }}
+            {{ data.queryString }}
         {% endif %}
     </div>
 {% else %}
     <span class="ui grey text">{{ 'three_brs_sylius_404_log_plugin.ui.no_query_string'|trans }}</span>
 {% endif %}
-

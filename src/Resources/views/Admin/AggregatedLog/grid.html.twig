@@ -1,0 +1,25 @@
+{% extends '@SyliusAdmin/layout.html.twig' %}
+
+{% block title %}{{ 'three_brs_sylius_404_log_plugin.ui.aggregated_logs'|trans }} {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="ui stackable grid">
+    <div class="sixteen wide column">
+        <div class="ui segment">
+            <h1 class="ui dividing header">
+                <i class="chart bar outline icon"></i>
+                {{ 'three_brs_sylius_404_log_plugin.ui.aggregated_logs'|trans }}
+            </h1>
+
+            {% include '@SyliusUi/Grid/_default.html.twig' with {'grid': grid} %}
+        </div>
+    </div>
+</div>
+
+<div class="ui basic segment">
+    <a href="{{ path('three_brs_sylius_404_log_plugin_admin_not_found_log_index') }}" class="ui labeled icon button">
+        <i class="list icon"></i>
+        {{ 'three_brs_sylius_404_log_plugin.ui.not_found_logs'|trans }}
+    </a>
+</div>
+{% endblock %}

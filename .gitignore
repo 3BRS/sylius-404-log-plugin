@@ -7,6 +7,8 @@
 
 /tests/Application/yarn.lock
 
+.envrc.dist
+
 compose.override.yaml
 /bin-docker/
 /deploy/
