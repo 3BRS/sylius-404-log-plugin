@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-final class ThreeBRSSylius404LogExtension extends Extension
+class ThreeBRSSylius404LogExtension extends Extension
 {
     /**
      * @inheritdoc

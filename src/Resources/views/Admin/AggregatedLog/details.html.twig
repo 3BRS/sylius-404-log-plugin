@@ -21,6 +21,12 @@
                     </div>
                 </div>
                 <div class="right aligned column">
+                    {% if is_setono_redirect_plugin_installed() %}
+                        <a href="{{ path('setono_sylius_redirect_admin_redirect_create') }}" class="ui green button" style="margin-right: 10px;" onclick="localStorage.setItem('prefill_source', '{{ slug|e('js') }}'); localStorage.setItem('prefill_domain', '{{ domain|e('js') }}');">
+                            <i class="plus icon"></i>
+                            {{ 'three_brs_sylius_404_log_plugin.ui.create_redirect_for_path'|trans }}
+                        </a>
+                    {% endif %}
                     <a href="{{ path('three_brs_sylius_404_log_plugin_admin_aggregated_log_details_delete_all', {
                         'domain': domain,
                         'slug': slug

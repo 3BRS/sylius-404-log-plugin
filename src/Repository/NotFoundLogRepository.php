@@ -144,4 +144,61 @@ class NotFoundLogRepository extends EntityRepository implements NotFoundLogRepos
 
         return $chartData;
     }
+
+    /**
+     * @return array{
+     *     count: int,
+     *     first_occurrence: \DateTimeInterface|null,
+     *     last_occurrence: \DateTimeInterface|null
+     * }|null
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getAggregatedByDomainAndSlug(string $domain, string $slug): ?array
+    {
+        $result = $this->createQueryBuilder('nfl')
+            ->select([
+                'COUNT(nfl.id) as count',
+                'MIN(nfl.createdAt) as first_occurrence',
+                'MAX(nfl.createdAt) as last_occurrence',
+            ])
+            ->where('nfl.urlDomain = :domain')
+            ->andWhere('nfl.urlSlug = :slug')
+            ->setParameter('domain', $domain)
+            ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (!$result || $result['count'] === 0) {
+            return null;
+        }
+
+        return [
+            'count' => (int) $result['count'],
+            'first_occurrence' => $result['first_occurrence'],
+            'last_occurrence' => $result['last_occurrence'],
+        ];
+    }
+
+    public function deleteByUrl(string $sourceUrl): void
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->delete($this->getClassName(), 'nfl')
+           ->where('nfl.urlSlug = :sourceUrl')
+           ->setParameter('sourceUrl', $sourceUrl);
+
+        $qb->getQuery()->execute();
+    }
+
+    public function deleteByUrlAndDomain(string $sourceUrl, string $domain): void
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->delete($this->getClassName(), 'nfl')
+           ->where('nfl.urlSlug = :sourceUrl')
+           ->andWhere('nfl.urlDomain = :domain')
+           ->setParameter('sourceUrl', $sourceUrl)
+           ->setParameter('domain', $domain);
+
+        $qb->getQuery()->execute();
+    }
 }

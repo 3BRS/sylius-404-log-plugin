@@ -33,4 +33,17 @@ interface NotFoundLogRepositoryInterface extends RepositoryInterface
      * }
      */
     public function getAggregatedStats(string $domain, string $slug): array;
+
+    /**
+     * @return array{
+     *     count: int,
+     *     first_occurrence: \DateTimeInterface|null,
+     *     last_occurrence: \DateTimeInterface|null
+     * }|null
+     */
+    public function getAggregatedByDomainAndSlug(string $domain, string $slug): ?array;
+
+    public function deleteByUrl(string $sourceUrl): void;
+
+    public function deleteByUrlAndDomain(string $sourceUrl, string $domain): void;
 }

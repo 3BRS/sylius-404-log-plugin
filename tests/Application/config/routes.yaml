@@ -1,2 +1,6 @@
 three_brs_sylius_404_log_plugin:
     resource: "@ThreeBRSSylius404LogPlugin/Resources/config/routes.yaml"
+
+setono_sylius_redirect_admin:
+    resource: "@SetonoSyliusRedirectPlugin/Resources/config/admin_routing.yaml"
+    prefix: /%sylius_admin.path_name%

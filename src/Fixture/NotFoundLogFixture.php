@@ -10,7 +10,7 @@ use Sylius\Bundle\FixturesBundle\Fixture\FixtureInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use ThreeBRS\Sylius404LogPlugin\Entity\NotFoundLog;
 
-final class NotFoundLogFixture extends AbstractFixture implements FixtureInterface
+class NotFoundLogFixture extends AbstractFixture implements FixtureInterface
 {
     private ObjectManager $manager;
 
