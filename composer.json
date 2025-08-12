@@ -39,7 +39,8 @@
 		"symfony/http-kernel": "^6.4",
 		"symfony/intl": "^6.4",
 		"symfony/web-profiler-bundle": "^6.4",
-		"doctrine/annotations": "^2.0"
+		"doctrine/annotations": "^2.0",
+		"setono/sylius-redirect-plugin": "^2.7"
 	},
 	"prefer-stable": true,
 	"autoload": {

@@ -45,3 +45,4 @@ three_brs_sylius_404_log_plugin_admin_aggregated_log_delete_all:
     methods: [GET]
     defaults:
         _controller: three_brs_sylius_404_log_plugin.controller.aggregated_log::deleteAllAction
+

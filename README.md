@@ -25,6 +25,7 @@
 * **Detailed Analytics** - View statistics, trends, and individual log entries
 * **Multi-language Support** - Available in 8 languages (EN, CS, SK, PL, DE, FR, IT, ES)
 * **Admin Integration** - Seamless integration into Sylius admin panel
+* **Redirect Plugin Integration** - Works perfectly with [setono/sylius-redirect-plugin](https://github.com/Setono/SyliusRedirectPlugin) for complete 404 error management
 
 ## Screenshots
 
@@ -99,9 +100,41 @@ After installation, navigate to your Sylius admin panel. You'll find a new "404 
 
 1. **Aggregated Log View** - Overview of all unique 404 URLs with occurrence counts
 2. **Detailed View** - Individual log entries for each URL
-3. **Filtering Options** - Filter by domain, URL path, and occurrence count
-4. **Statistics** - Error trends and analytics
-5. **Management** - Delete logs for specific URLs
+
+## Integration with Redirect Plugins
+
+### Setono Sylius Redirect Plugin
+
+This plugin works excellently together with [setono/sylius-redirect-plugin](https://github.com/Setono/SyliusRedirectPlugin) to provide a complete 404 error management solution.
+
+**Why combine both plugins?**
+- **404 Log Plugin**: Identifies which URLs are generating 404 errors
+- **Setono Redirect Plugin**: Allows you to create redirects for those problematic URLs
+
+**Recommended workflow:**
+
+1. **Monitor 404 errors** using this plugin to identify frequently accessed broken URLs
+2. **Create redirects** in the Setono Redirect Plugin admin panel for important URLs
+3. **Track effectiveness** by monitoring if 404 occurrences decrease after implementing redirects
+
+**Installation of Setono Redirect Plugin:**
+
+```bash
+composer require setono/sylius-redirect-plugin
+```
+
+**Integration benefits:**
+- **Data-driven redirects**: Use 404 logs to prioritize which redirects to create
+- **SEO improvement**: Fix broken links that hurt search engine rankings
+- **Better UX**: Automatically redirect users to relevant content instead of showing 404 errors
+- **Analytics**: Monitor redirect effectiveness by tracking 404 reduction
+
+**Best practices when using both plugins:**
+
+1. **Review 404 logs weekly** to identify new broken URLs
+2. **Create redirects for high-traffic 404 URLs** (URLs with many occurrences)
+3. **Use meaningful redirect targets** based on URL similarity or content relevance
+4. **Monitor redirect performance** by checking if specific URLs stop appearing in 404 logs
 
 ## Development
 

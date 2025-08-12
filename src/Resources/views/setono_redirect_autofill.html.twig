@@ -1,0 +1,48 @@
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const sourceField = document.getElementById("setono_sylius_redirect_redirect_source");
+
+    if (sourceField) {
+        const prefillSource = localStorage.getItem("prefill_source");
+        const prefillDomain = localStorage.getItem("prefill_domain");
+
+        if (prefillSource) {
+            sourceField.value = prefillSource;
+            localStorage.removeItem("prefill_source");
+
+            const destinationField = document.getElementById("setono_sylius_redirect_redirect_destination");
+            if (destinationField) {
+                destinationField.focus();
+            }
+        }
+
+        // Auto-select channel based on domain using dynamic mapping
+        if (prefillDomain) {
+            localStorage.removeItem("prefill_domain");
+
+            // Channel mapping from PHP
+            const channelMapping = {{ channel_mapping|json_encode|raw }};
+
+            // Find all channel checkboxes
+            const channelCheckboxes = document.querySelectorAll("input[name=\"setono_sylius_redirect_redirect[channels][]\"]");
+
+            channelCheckboxes.forEach(function(checkbox) {
+                const channelCode = checkbox.value;
+
+                // Check if this channel matches the domain
+                if (channelMapping[channelCode]) {
+                    const mappedDomain = channelMapping[channelCode];
+
+                    if (prefillDomain.toLowerCase().includes(mappedDomain)) {
+                        checkbox.checked = true;
+                        // Trigger change event for Semantic UI
+                        const event = new Event("change", { bubbles: true });
+                        checkbox.dispatchEvent(event);
+                    }
+                }
+            });
+        }
+    }
+});
+</script>
+
