@@ -1,0 +1,47 @@
+three_brs_sylius_404_log_plugin_admin_not_found_log:
+    resource: |
+        alias: three_brs_sylius_404_log_plugin.not_found_log
+        section: admin
+        templates: "@SyliusAdmin\\Crud"
+        only: ['index', 'delete']
+        grid: three_brs_sylius_admin_404_log_plugin_not_found_log
+        vars:
+            all:
+                subheader: three_brs_sylius_404_log_plugin.ui.not_found_logs
+            index:
+                icon: 'file alternate outline'
+    type: sylius.resource
+
+# Agregované logy s Sylius grid systémem
+three_brs_sylius_404_log_plugin_admin_aggregated_log_index:
+    path: /404-logs/aggregated
+    methods: [GET]
+    defaults:
+        _controller: three_brs_sylius_404_log_plugin.controller.aggregated_log::indexAction
+        _sylius:
+            grid: three_brs_sylius_admin_404_log_plugin_aggregated
+            template: "@SyliusAdmin/Crud/index.html.twig"
+            vars:
+                header: three_brs_sylius_404_log_plugin.ui.aggregated_logs
+                subheader: three_brs_sylius_404_log_plugin.ui.aggregated_logs
+                icon: 'chart bar outline'
+
+three_brs_sylius_404_log_plugin_admin_aggregated_log_details:
+    path: /404-logs/aggregated/details
+    methods: [GET]
+    defaults:
+        _controller: three_brs_sylius_404_log_plugin.controller.aggregated_log_details::indexAction
+        _sylius:
+            template: "@ThreeBRSSylius404LogPlugin/Admin/AggregatedLog/details.html.twig"
+
+three_brs_sylius_404_log_plugin_admin_aggregated_log_details_delete_all:
+    path: /404-logs/aggregated/details/delete-all
+    methods: [GET]
+    defaults:
+        _controller: three_brs_sylius_404_log_plugin.controller.aggregated_log_details::deleteAllAction
+
+three_brs_sylius_404_log_plugin_admin_aggregated_log_delete_all:
+    path: /404-logs/aggregated/delete-all
+    methods: [GET]
+    defaults:
+        _controller: three_brs_sylius_404_log_plugin.controller.aggregated_log::deleteAllAction
