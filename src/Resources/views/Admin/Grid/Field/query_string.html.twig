@@ -1,0 +1,14 @@
+{% if data %}
+    {% set maxLength = 100 %}
+    <div class="ui small label" title="{{ data }}">
+        <i class="search icon"></i>
+        {% if data|length > maxLength %}
+            {{ data|slice(0, maxLength) }}...
+        {% else %}
+            {{ data }}
+        {% endif %}
+    </div>
+{% else %}
+    <span class="ui grey text">{{ 'three_brs_sylius_404_log_plugin.ui.no_query_string'|trans }}</span>
+{% endif %}
+

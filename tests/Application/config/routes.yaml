@@ -1,0 +1,2 @@
+three_brs_sylius_404_log_plugin:
+    resource: "@ThreeBRSSylius404LogPlugin/Resources/config/routes.yaml"

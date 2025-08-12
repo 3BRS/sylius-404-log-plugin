@@ -1,0 +1,14 @@
+{% if data %}
+    {% set maxLength = 60 %}
+    <div class="ui tiny label" title="{{ data }}">
+        <i class="computer icon"></i>
+        {% if data|length > maxLength %}
+            {{ data|slice(0, maxLength) }}...
+        {% else %}
+            {{ data }}
+        {% endif %}
+    </div>
+{% else %}
+    <span class="ui grey text">-</span>
+{% endif %}
+

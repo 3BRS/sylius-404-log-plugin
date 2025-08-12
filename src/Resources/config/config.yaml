@@ -1,0 +1,67 @@
+sylius_resource:
+    resources:
+        three_brs_sylius_404_log_plugin.not_found_log:
+            driver: doctrine/orm
+            classes:
+                model: ThreeBRS\Sylius404LogPlugin\Entity\NotFoundLog
+
+sylius_grid:
+    grids:
+        three_brs_sylius_admin_404_log_plugin_not_found_log:
+            driver:
+                name: doctrine/orm
+                options:
+                    class: "%three_brs_sylius_404_log_plugin.model.not_found_log.class%"
+            sorting:
+                createdAt: desc
+            fields:
+                id:
+                    type: string
+                    label: three_brs_sylius_404_log_plugin.ui.id
+                    sortable: true
+                urlDomain:
+                    type: string
+                    label: three_brs_sylius_404_log_plugin.ui.url_domain
+                    sortable: true
+                urlSlug:
+                    type: twig
+                    label: three_brs_sylius_404_log_plugin.ui.url_slug
+                    sortable: true
+                    options:
+                        template: "@ThreeBRSSylius404LogPlugin/Admin/Grid/Field/url_slug.html.twig"
+                queryString:
+                    type: twig
+                    label: three_brs_sylius_404_log_plugin.ui.query_string
+                    sortable: false
+                    options:
+                        template: "@ThreeBRSSylius404LogPlugin/Admin/Grid/Field/query_string.html.twig"
+                userAgent:
+                    type: twig
+                    label: three_brs_sylius_404_log_plugin.ui.user_agent
+                    sortable: false
+                    options:
+                        template: "@ThreeBRSSylius404LogPlugin/Admin/Grid/Field/user_agent.html.twig"
+                createdAt:
+                    type: datetime
+                    label: sylius.ui.date
+                    sortable: true
+            filters:
+                urlDomain:
+                    type: string
+                    label: three_brs_sylius_404_log_plugin.ui.url_domain
+                urlSlug:
+                    type: string
+                    label: three_brs_sylius_404_log_plugin.ui.url_slug
+                queryString:
+                    type: string
+                    label: three_brs_sylius_404_log_plugin.ui.query_string
+                userAgent:
+                    type: string
+                    label: three_brs_sylius_404_log_plugin.ui.user_agent
+                createdAt:
+                    type: date
+                    label: sylius.ui.date
+            actions:
+                item:
+                    delete:
+                        type: delete

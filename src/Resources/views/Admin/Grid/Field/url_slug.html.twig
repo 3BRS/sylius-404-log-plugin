@@ -1,0 +1,9 @@
+{% set maxLength = 50 %}
+
+<div class="ui label" title="{{ data }}">
+    {% if data|length > maxLength %}
+        {{ data|slice(0, maxLength) }}...
+    {% else %}
+        {{ data }}
+    {% endif %}
+</div>

@@ -1,0 +1,15 @@
+three_brs_sylius_404_log_plugin:
+    ui:
+        not_found_logs: 404 Logs
+        administration: Administration
+        id: ID
+        url_domain: Domain
+        url_slug: URL Path
+        query_string: Query String
+        user_agent: User Agent
+        full_url: Full URL
+        actions: Actions
+        show_details: Show Details
+        delete_log: Delete Log
+        no_query_string: No query string
+        truncated: "..."

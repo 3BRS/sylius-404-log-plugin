@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        public: false
+        autowire: false
+        autoconfigure: false
+
+    ThreeBRS\Sylius404LogPlugin\EventListener\ExceptionLoggerListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+
+
+    ThreeBRS\Sylius404LogPlugin\Menu\AdminMenuListener:
+        tags:
+            -   name: kernel.event_listener
+                event: sylius.menu.admin.main
+                method: addAdminMenuItems

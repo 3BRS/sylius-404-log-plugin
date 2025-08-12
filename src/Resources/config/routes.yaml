@@ -1,0 +1,14 @@
+three_brs_sylius_admin_404_log_plugin_not_found_log:
+    prefix: "/%sylius_admin.path_name%"
+    resource: |
+        alias: three_brs_sylius_404_log_plugin.not_found_log
+        section: admin
+        templates: '@SyliusAdmin/Crud'
+        grid: three_brs_sylius_admin_404_log_plugin_not_found_log
+        except: ['create', 'show', 'update']
+        vars:
+            all:
+                subheader: 404 Logs
+            index:
+                icon: 'file image outline'
+    type: sylius.resource
