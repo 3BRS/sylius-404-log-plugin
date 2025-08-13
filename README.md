@@ -99,7 +99,32 @@ The plugin includes translations for:
 After installation, navigate to your Sylius admin panel. You'll find a new "404 Logs" menu item that provides:
 
 1. **Aggregated Log View** - Overview of all unique 404 URLs with occurrence counts
-2. **Detailed View** - Individual log entries for each URL
+2. **Detailed Log View** - Individual log entries with timestamps and user agent information, view trends and statistics over time
+3. **Filtering & Search** - Filter logs by domain, URL path, and occurrence count
+
+### Console Commands
+
+#### Log Cleanup Command
+
+The plugin provides a console command to clean up old 404 logs automatically. This is useful for maintaining database performance and preventing excessive storage usage.
+
+```bash
+php bin/console three-brs:404-logs:cleanup [days] [options]
+```
+
+**Arguments:**
+- `days` - Number of days to keep logs (older logs will be deleted)
+
+**Options:**
+- `--dry-run` - Show what would be deleted without actually deleting
+- `--batch-size=N` - Number of records to delete in each batch (default: 1000)
+
+**Examples:**
+
+```bash
+# Delete logs older than 30 days
+php bin/console three-brs:404-logs:cleanup 30
+```
 
 ## Integration with Redirect Plugins
 
