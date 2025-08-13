@@ -33,5 +33,10 @@ three_brs_sylius_404_log_plugin:
         confirm_deletion: "Are you sure you want to delete all logs for this URL? This action cannot be undone."
         delete_all_logs: "Delete All Logs"
         create_redirect_for_path: "Create Redirect from 404 log"
+
+        # Pagination
+        showing: "Showing"
+        of: "of"
+        items: "items"
         last_30_days: "Last 30 Days"
         date: "Date"
