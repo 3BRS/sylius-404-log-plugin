@@ -201,4 +201,25 @@ class NotFoundLogRepository extends EntityRepository implements NotFoundLogRepos
 
         $qb->getQuery()->execute();
     }
+
+    public function countLogsOlderThan(\DateTimeInterface $date): int
+    {
+        return (int) $this->createQueryBuilder('nfl')
+            ->select('COUNT(nfl.id)')
+            ->where('nfl.createdAt < :date')
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function deleteLogsOlderThanInBatch(\DateTimeInterface $date, int $batchSize): int
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->delete($this->getClassName(), 'nfl')
+           ->where('nfl.createdAt < :date')
+           ->setParameter('date', $date)
+           ->setMaxResults($batchSize);
+
+        return $qb->getQuery()->execute();
+    }
 }

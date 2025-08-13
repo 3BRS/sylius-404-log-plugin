@@ -46,4 +46,14 @@ interface NotFoundLogRepositoryInterface extends RepositoryInterface
     public function deleteByUrl(string $sourceUrl): void;
 
     public function deleteByUrlAndDomain(string $sourceUrl, string $domain): void;
+
+    /**
+     * Count logs older than specified date
+     */
+    public function countLogsOlderThan(\DateTimeInterface $date): int;
+
+    /**
+     * Delete logs older than specified date in batches
+     */
+    public function deleteLogsOlderThanInBatch(\DateTimeInterface $date, int $batchSize): int;
 }

@@ -5,23 +5,17 @@ parameters:
         - '/_'
 
 services:
-    sylius.repository.three_brs_sylius_404_log_plugin_not_found_log:
-        class: ThreeBRS\Sylius404LogPlugin\Repository\NotFoundLogRepository
-        factory: ['@doctrine.orm.entity_manager', getRepository]
-        arguments:
-            - ThreeBRS\Sylius404LogPlugin\Entity\NotFoundLog
-
     three_brs_sylius_404_log_plugin.grid.aggregated_log_data_provider:
         class: ThreeBRS\Sylius404LogPlugin\Grid\AggregatedLogDataProvider
         arguments:
-            $repository: '@sylius.repository.three_brs_sylius_404_log_plugin_not_found_log'
+            $repository: '@three_brs_sylius_404_log_plugin.repository.not_found_log'
         tags:
             - { name: sylius.grid_driver, alias: three_brs_sylius_404_log_plugin.grid.aggregated_log_data_provider }
 
     three_brs_sylius_404_log_plugin.controller.aggregated_log_details:
         class: ThreeBRS\Sylius404LogPlugin\Controller\AggregatedLogDetailsController
         arguments:
-            $notFoundLogRepository: '@sylius.repository.three_brs_sylius_404_log_plugin_not_found_log'
+            $notFoundLogRepository: '@three_brs_sylius_404_log_plugin.repository.not_found_log'
             $entityManager: '@doctrine.orm.entity_manager'
         calls:
             - [setContainer, ['@service_container']]
@@ -31,7 +25,7 @@ services:
     three_brs_sylius_404_log_plugin.controller.aggregated_log:
         class: ThreeBRS\Sylius404LogPlugin\Controller\AggregatedLogController
         arguments:
-            $repository: '@sylius.repository.three_brs_sylius_404_log_plugin_not_found_log'
+            $repository: '@three_brs_sylius_404_log_plugin.repository.not_found_log'
             $entityManager: '@doctrine.orm.entity_manager'
         calls:
             - [setContainer, ['@service_container']]
@@ -43,7 +37,6 @@ services:
         arguments:
             $logger: '@logger'
             $entityManager: '@doctrine.orm.entity_manager'
-            $notFoundLogFactory: '@three_brs_sylius_404_log_plugin.factory.not_found_log'
             $skipPatterns: '%three_brs_sylius_404_log_plugin.skip_patterns%'
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: -1 }
@@ -86,6 +79,15 @@ services:
     three_brs_sylius_404_log_plugin.event_listener.setono_redirect_created:
         class: ThreeBRS\Sylius404LogPlugin\EventListener\SetonoRedirectCreatedListener
         arguments:
-            $notFoundLogRepository: '@sylius.repository.three_brs_sylius_404_log_plugin_not_found_log'
+            $notFoundLogRepository: '@three_brs_sylius_404_log_plugin.repository.not_found_log'
         tags:
             - { name: doctrine.orm.entity_listener, entity: 'Setono\SyliusRedirectPlugin\Model\Redirect', event: postPersist, method: postPersist }
+
+    # Command for cleaning up old 404 logs
+    three_brs_sylius_404_log_plugin.command.cleanup_not_found_logs:
+        class: ThreeBRS\Sylius404LogPlugin\Command\CleanupNotFoundLogsCommand
+        arguments:
+            $notFoundLogRepository: '@three_brs_sylius_404_log_plugin.repository.not_found_log'
+            $entityManager: '@doctrine.orm.entity_manager'
+        tags:
+            - { name: console.command }

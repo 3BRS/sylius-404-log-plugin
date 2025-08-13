@@ -6,10 +6,10 @@ namespace ThreeBRS\Sylius404LogPlugin\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Sylius\Resource\Factory\Factory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use ThreeBRS\Sylius404LogPlugin\Entity\NotFoundLog;
 
 class ExceptionLoggerListener
 {
@@ -20,21 +20,17 @@ class ExceptionLoggerListener
 
     private LoggerInterface $logger;
 
-    private Factory $notFoundLogFactory;
-
     /**
      * @param string[] $skipPatterns Patterns to skip logging, e.g. ['/admin', '/api']
      */
     public function __construct(
         LoggerInterface $logger,
         EntityManagerInterface $entityManager,
-        Factory $notFoundLogFactory,
         array $skipPatterns = [],
     ) {
         $this->entityManager = $entityManager;
         $this->skipPatterns = $skipPatterns;
         $this->logger = $logger;
-        $this->notFoundLogFactory = $notFoundLogFactory;
     }
 
     public function onKernelException(ExceptionEvent $event): void
@@ -73,7 +69,7 @@ class ExceptionLoggerListener
     private function logNotFoundException(Request $request): void
     {
         try {
-            $notFoundLog = $this->notFoundLogFactory->createNew();
+            $notFoundLog = new NotFoundLog();
             $notFoundLog->setUrlDomain($request->getHost());
             $notFoundLog->setUrlSlug($request->getPathInfo());
             $notFoundLog->setQueryString($request->getQueryString());
