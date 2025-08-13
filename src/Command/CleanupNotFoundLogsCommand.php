@@ -23,8 +23,9 @@ class CleanupNotFoundLogsCommand extends Command
     public function __construct(
         private NotFoundLogRepositoryInterface $notFoundLogRepository,
         private EntityManagerInterface $entityManager,
+        ?string $name = null,
     ) {
-        parent::__construct();
+        parent::__construct($name);
     }
 
     protected function configure(): void
