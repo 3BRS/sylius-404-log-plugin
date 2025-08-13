@@ -63,6 +63,7 @@ jobs:
             -   run: APP_ENV=dev bin/phpstan.sh
             -   run: APP_ENV=dev bin/ecs.sh --clear-cache
             -   run: APP_ENV=dev bin/symfony-lint.sh
+            -   run: APP_ENV=dev bin/phpunit
 
             # COMPOSER PREFER DIST #
             -   run: COMPOSER_MEMORY_LIMIT=-1 composer update --no-interaction --prefer-dist --no-plugins
@@ -75,3 +76,4 @@ jobs:
             -   run: APP_ENV=dev bin/phpstan.sh
             -   run: APP_ENV=dev bin/ecs.sh --clear-cache
             -   run: APP_ENV=dev bin/symfony-lint.sh
+            -   run: APP_ENV=dev bin/phpunit
