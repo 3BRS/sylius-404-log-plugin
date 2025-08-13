@@ -24,37 +24,73 @@ class AggregatedLogController extends AbstractController
 
     public function indexAction(Request $request): Response
     {
+        // Pagination parametry
+        $page = max(1, $request->query->getInt('page', 1));
+        $limit = 20; // Počet záznamů na stránku
+
         // Získáme filtry z requestu
         $domainFilter = $request->query->get('domain', '');
         $urlPathFilter = $request->query->get('urlPath', '');
         $minCountFilter = $request->query->get('minCount', '');
         $maxCountFilter = $request->query->get('maxCount', '');
 
-        // Získáme agregovaná data s filtry
-        $queryBuilder = $this->repository->createAggregatedQueryBuilder();
+        // Nejprve spočítáme celkový počet záznamů pro pagination
+        $countQueryBuilder = $this->repository->createAggregatedQueryBuilder();
 
-        // Aplikujeme filtry
+        // Aplikujeme stejné filtry na count query
         if (!empty($domainFilter)) {
-            $queryBuilder->andHaving('urlDomain LIKE :domain')
+            $countQueryBuilder->andHaving('urlDomain LIKE :domain')
                 ->setParameter('domain', '%' . $domainFilter . '%');
         }
 
         if (!empty($urlPathFilter)) {
-            $queryBuilder->andHaving('urlSlug LIKE :urlPath')
+            $countQueryBuilder->andHaving('urlSlug LIKE :urlPath')
                 ->setParameter('urlPath', '%' . $urlPathFilter . '%');
         }
 
         if (!empty($minCountFilter) && is_numeric($minCountFilter)) {
-            $queryBuilder->andHaving('logCount >= :minCount')
+            $countQueryBuilder->andHaving('logCount >= :minCount')
                 ->setParameter('minCount', (int) $minCountFilter);
         }
 
         if (!empty($maxCountFilter) && is_numeric($maxCountFilter)) {
-            $queryBuilder->andHaving('logCount <= :maxCount')
+            $countQueryBuilder->andHaving('logCount <= :maxCount')
                 ->setParameter('maxCount', (int) $maxCountFilter);
         }
 
-        $aggregatedData = $queryBuilder->getQuery()->getResult();
+        // Spočítáme celkový počet záznamů
+        $totalItems = count($countQueryBuilder->getQuery()->getResult());
+        $totalPages = ceil($totalItems / $limit);
+
+        // Nyní získáme data pro aktuální stránku
+        $dataQueryBuilder = $this->repository->createAggregatedQueryBuilder();
+
+        // Aplikujeme stejné filtry na data query
+        if (!empty($domainFilter)) {
+            $dataQueryBuilder->andHaving('urlDomain LIKE :domain')
+                ->setParameter('domain', '%' . $domainFilter . '%');
+        }
+
+        if (!empty($urlPathFilter)) {
+            $dataQueryBuilder->andHaving('urlSlug LIKE :urlPath')
+                ->setParameter('urlPath', '%' . $urlPathFilter . '%');
+        }
+
+        if (!empty($minCountFilter) && is_numeric($minCountFilter)) {
+            $dataQueryBuilder->andHaving('logCount >= :minCount')
+                ->setParameter('minCount', (int) $minCountFilter);
+        }
+
+        if (!empty($maxCountFilter) && is_numeric($maxCountFilter)) {
+            $dataQueryBuilder->andHaving('logCount <= :maxCount')
+                ->setParameter('maxCount', (int) $maxCountFilter);
+        }
+
+        // Přidáme pagination pouze na data query
+        $dataQueryBuilder->setFirstResult(($page - 1) * $limit)
+                        ->setMaxResults($limit);
+
+        $aggregatedData = $dataQueryBuilder->getQuery()->getResult();
 
         return $this->render('@ThreeBRSSylius404LogPlugin/Admin/AggregatedLog/index.html.twig', [
             'aggregatedData' => $aggregatedData,
@@ -63,6 +99,14 @@ class AggregatedLogController extends AbstractController
                 'urlPath' => $urlPathFilter,
                 'minCount' => $minCountFilter,
                 'maxCount' => $maxCountFilter,
+            ],
+            'pagination' => [
+                'currentPage' => $page,
+                'totalPages' => $totalPages,
+                'totalItems' => $totalItems,
+                'limit' => $limit,
+                'hasNextPage' => $page < $totalPages,
+                'hasPreviousPage' => $page > 1,
             ],
         ]);
     }

@@ -138,6 +138,79 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <!-- Pagination -->
+    {% if pagination.totalPages > 1 %}
+        <div class="ui segment">
+            <div class="ui stackable grid">
+                <div class="eight wide column">
+                    <div class="ui basic segment">
+                        {{ 'three_brs_sylius_404_log_plugin.ui.showing'|trans }} {{ (pagination.currentPage - 1) * pagination.limit + 1 }} - {{ min(pagination.currentPage * pagination.limit, pagination.totalItems) }} {{ 'three_brs_sylius_404_log_plugin.ui.of'|trans }} {{ pagination.totalItems }} {{ 'three_brs_sylius_404_log_plugin.ui.items'|trans }}
+                    </div>
+                </div>
+                <div class="eight wide right aligned column">
+                    <div class="ui pagination menu">
+                        {% if pagination.hasPreviousPage %}
+                            <a class="item" href="{{ path('three_brs_sylius_404_log_plugin_admin_aggregated_log_index', app.request.query.all|merge({'page': 1})) }}">
+                                <i class="angle double left icon"></i>
+                            </a>
+                            <a class="item" href="{{ path('three_brs_sylius_404_log_plugin_admin_aggregated_log_index', app.request.query.all|merge({'page': pagination.currentPage - 1})) }}">
+                                <i class="angle left icon"></i>
+                            </a>
+                        {% else %}
+                            <div class="disabled item">
+                                <i class="angle double left icon"></i>
+                            </div>
+                            <div class="disabled item">
+                                <i class="angle left icon"></i>
+                            </div>
+                        {% endif %}
+
+                        {% set startPage = max(1, pagination.currentPage - 2) %}
+                        {% set endPage = min(pagination.totalPages, pagination.currentPage + 2) %}
+
+                        {% if startPage > 1 %}
+                            <a class="item" href="{{ path('three_brs_sylius_404_log_plugin_admin_aggregated_log_index', app.request.query.all|merge({'page': 1})) }}">1</a>
+                            {% if startPage > 2 %}
+                                <div class="disabled item">...</div>
+                            {% endif %}
+                        {% endif %}
+
+                        {% for page in startPage..endPage %}
+                            {% if page == pagination.currentPage %}
+                                <div class="active item">{{ page }}</div>
+                            {% else %}
+                                <a class="item" href="{{ path('three_brs_sylius_404_log_plugin_admin_aggregated_log_index', app.request.query.all|merge({'page': page})) }}">{{ page }}</a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if endPage < pagination.totalPages %}
+                            {% if endPage < pagination.totalPages - 1 %}
+                                <div class="disabled item">...</div>
+                            {% endif %}
+                            <a class="item" href="{{ path('three_brs_sylius_404_log_plugin_admin_aggregated_log_index', app.request.query.all|merge({'page': pagination.totalPages})) }}">{{ pagination.totalPages }}</a>
+                        {% endif %}
+
+                        {% if pagination.hasNextPage %}
+                            <a class="item" href="{{ path('three_brs_sylius_404_log_plugin_admin_aggregated_log_index', app.request.query.all|merge({'page': pagination.currentPage + 1})) }}">
+                                <i class="angle right icon"></i>
+                            </a>
+                            <a class="item" href="{{ path('three_brs_sylius_404_log_plugin_admin_aggregated_log_index', app.request.query.all|merge({'page': pagination.totalPages})) }}">
+                                <i class="angle double right icon"></i>
+                            </a>
+                        {% else %}
+                            <div class="disabled item">
+                                <i class="angle right icon"></i>
+                            </div>
+                            <div class="disabled item">
+                                <i class="angle double right icon"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% else %}
     <div class="ui icon message">
         <i class="inbox icon"></i>
