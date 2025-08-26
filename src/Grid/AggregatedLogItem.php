@@ -20,7 +20,7 @@ class AggregatedLogItem
      * @param array{
      *     urlDomain: string,
      *     urlSlug: string,
-     *     count: int,
+     *     logCount: int,
      *     lastOccurrence: string,
      *     firstOccurrence: string
      * } $data
@@ -29,7 +29,7 @@ class AggregatedLogItem
     {
         $this->urlDomain = $data['urlDomain'];
         $this->urlSlug = $data['urlSlug'];
-        $this->count = (int) $data['count'];
+        $this->count = (int) $data['logCount'];
         $this->lastOccurrence = $data['lastOccurrence'];
         $this->firstOccurrence = $data['firstOccurrence'];
     }

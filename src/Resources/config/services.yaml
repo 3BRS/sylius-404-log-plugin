@@ -5,13 +5,6 @@ parameters:
         - '/_'
 
 services:
-    three_brs_sylius_404_log_plugin.grid.aggregated_log_data_provider:
-        class: ThreeBRS\Sylius404LogPlugin\Grid\AggregatedLogDataProvider
-        arguments:
-            $repository: '@three_brs_sylius_404_log_plugin.repository.not_found_log'
-        tags:
-            - { name: sylius.grid_driver, alias: three_brs_sylius_404_log_plugin.grid.aggregated_log_data_provider }
-
     three_brs_sylius_404_log_plugin.controller.aggregated_log_details:
         class: ThreeBRS\Sylius404LogPlugin\Controller\AggregatedLogDetailsController
         arguments:

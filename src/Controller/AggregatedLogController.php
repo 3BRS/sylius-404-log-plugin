@@ -34,63 +34,86 @@ class AggregatedLogController extends AbstractController
         $minCountFilter = $request->query->get('minCount', '');
         $maxCountFilter = $request->query->get('maxCount', '');
 
-        // Nejprve spočítáme celkový počet záznamů pro pagination
-        $countQueryBuilder = $this->repository->createAggregatedQueryBuilder();
+        // Použijeme přímý SQL dotaz místo QueryBuilder pro PostgreSQL kompatibilitu
+        $connection = $this->entityManager->getConnection();
 
-        // Aplikujeme stejné filtry na count query
+        // Sestavíme základní SQL dotaz
+        $sql = 'SELECT 
+            nfl.url_domain as "urlDomain",
+            nfl.url_slug as "urlSlug",
+            COUNT(nfl.id) as "logCount",
+            MAX(nfl.created_at) as "lastOccurrence",
+            MIN(nfl.created_at) as "firstOccurrence"
+        FROM three_brs_404_not_found_log nfl';
+
+        $whereConditions = [];
+        $parameters = [];
+
+        // Přidáme WHERE podmínky podle filtrů
         if (!empty($domainFilter)) {
-            $countQueryBuilder->andHaving('urlDomain LIKE :domain')
-                ->setParameter('domain', '%' . $domainFilter . '%');
+            $whereConditions[] = 'nfl.url_domain LIKE :domain';
+            $parameters['domain'] = '%' . $domainFilter . '%';
         }
 
         if (!empty($urlPathFilter)) {
-            $countQueryBuilder->andHaving('urlSlug LIKE :urlPath')
-                ->setParameter('urlPath', '%' . $urlPathFilter . '%');
+            $whereConditions[] = 'nfl.url_slug LIKE :urlPath';
+            $parameters['urlPath'] = '%' . $urlPathFilter . '%';
         }
 
+        // Přidáme WHERE klauzuli pokud existují podmínky
+        if (!empty($whereConditions)) {
+            $sql .= ' WHERE ' . implode(' AND ', $whereConditions);
+        }
+
+        // Přidáme GROUP BY
+        $sql .= ' GROUP BY nfl.url_domain, nfl.url_slug';
+
+        // Přidáme HAVING podmínky pro count filtry
+        $havingConditions = [];
+
         if (!empty($minCountFilter) && is_numeric($minCountFilter)) {
-            $countQueryBuilder->andHaving('logCount >= :minCount')
-                ->setParameter('minCount', (int) $minCountFilter);
+            $havingConditions[] = 'COUNT(nfl.id) >= :minCount';
+            $parameters['minCount'] = (int) $minCountFilter;
         }
 
         if (!empty($maxCountFilter) && is_numeric($maxCountFilter)) {
-            $countQueryBuilder->andHaving('logCount <= :maxCount')
-                ->setParameter('maxCount', (int) $maxCountFilter);
+            $havingConditions[] = 'COUNT(nfl.id) <= :maxCount';
+            $parameters['maxCount'] = (int) $maxCountFilter;
         }
 
-        // Spočítáme celkový počet záznamů
-        $totalItems = count($countQueryBuilder->getQuery()->getResult());
+        if (!empty($havingConditions)) {
+            $sql .= ' HAVING ' . implode(' AND ', $havingConditions);
+        }
+
+        // Přidáme ORDER BY
+        $sql .= ' ORDER BY COUNT(nfl.id) DESC';
+
+        // Nejprve spočítáme celkový počet záznamů pro pagination
+        $countStmt = $connection->prepare($sql);
+        foreach ($parameters as $key => $value) {
+            $countStmt->bindValue($key, $value);
+        }
+        $countResults = $countStmt->executeQuery()->fetchAllAssociative();
+        $totalItems = count($countResults);
         $totalPages = ceil($totalItems / $limit);
 
-        // Nyní získáme data pro aktuální stránku
-        $dataQueryBuilder = $this->repository->createAggregatedQueryBuilder();
+        // Přidáme LIMIT pro paginaci (kompatibilní s MySQL i PostgreSQL)
+        $offset = ($page - 1) * $limit;
+        $databasePlatform = $connection->getDatabasePlatform()->getName();
 
-        // Aplikujeme stejné filtry na data query
-        if (!empty($domainFilter)) {
-            $dataQueryBuilder->andHaving('urlDomain LIKE :domain')
-                ->setParameter('domain', '%' . $domainFilter . '%');
+        if ($databasePlatform === 'postgresql') {
+            $sql .= ' LIMIT ' . $limit . ' OFFSET ' . $offset;
+        } else {
+            // MySQL syntaxe (a většina ostatních databází)
+            $sql .= ' LIMIT ' . $offset . ', ' . $limit;
         }
 
-        if (!empty($urlPathFilter)) {
-            $dataQueryBuilder->andHaving('urlSlug LIKE :urlPath')
-                ->setParameter('urlPath', '%' . $urlPathFilter . '%');
+        // Získáme data pro aktuální stránku
+        $dataStmt = $connection->prepare($sql);
+        foreach ($parameters as $key => $value) {
+            $dataStmt->bindValue($key, $value);
         }
-
-        if (!empty($minCountFilter) && is_numeric($minCountFilter)) {
-            $dataQueryBuilder->andHaving('logCount >= :minCount')
-                ->setParameter('minCount', (int) $minCountFilter);
-        }
-
-        if (!empty($maxCountFilter) && is_numeric($maxCountFilter)) {
-            $dataQueryBuilder->andHaving('logCount <= :maxCount')
-                ->setParameter('maxCount', (int) $maxCountFilter);
-        }
-
-        // Přidáme pagination pouze na data query
-        $dataQueryBuilder->setFirstResult(($page - 1) * $limit)
-                        ->setMaxResults($limit);
-
-        $aggregatedData = $dataQueryBuilder->getQuery()->getResult();
+        $aggregatedData = $dataStmt->executeQuery()->fetchAllAssociative();
 
         return $this->render('@ThreeBRSSylius404LogPlugin/Admin/AggregatedLog/index.html.twig', [
             'aggregatedData' => $aggregatedData,

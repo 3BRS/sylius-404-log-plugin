@@ -1,6 +1,11 @@
 # CHANGELOG
 
-## v1.2.0 (2025-08-13)
+## v1.1.2 (2025-08-26)
+
+#### Bug Fixes
+- **PostgreSQL Compatibility** - Fixed critical compatibility issues with PostgreSQL database
+
+## v1.1.1 (2025-08-13)
 
 #### New Features
 - **Console Command for Log Cleanup** - Added `three-brs:404-logs:cleanup` command for automated deletion of old 404 logs
