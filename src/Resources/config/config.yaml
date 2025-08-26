@@ -68,42 +68,21 @@ sylius_grid:
                 urlDomain:
                     type: string
                     label: three_brs_sylius_404_log_plugin.ui.url_domain
-                    sortable: true
+                    sortable: false
                 urlSlug:
                     type: string
                     label: three_brs_sylius_404_log_plugin.ui.url_slug
-                    sortable: true
+                    sortable: false
                 count:
                     type: string
                     label: three_brs_sylius_404_log_plugin.ui.count
-                    sortable: true
+                    sortable: false
                 lastOccurrence:
                     type: datetime
                     label: three_brs_sylius_404_log_plugin.ui.last_occurrence
-                    sortable: true
+                    sortable: false
                     options:
                         format: 'd.m.Y H:i:s'
-            filters:
-                urlDomain:
-                    type: string
-                    label: three_brs_sylius_404_log_plugin.ui.url_domain
-                    options:
-                        fields: [urlDomain]
-                urlSlug:
-                    type: string
-                    label: three_brs_sylius_404_log_plugin.ui.url_slug
-                    options:
-                        fields: [urlSlug]
-                minCount:
-                    type: string
-                    label: three_brs_sylius_404_log_plugin.ui.min_count
-                    options:
-                        fields: [count]
-                maxCount:
-                    type: string
-                    label: three_brs_sylius_404_log_plugin.ui.max_count
-                    options:
-                        fields: [count]
             actions:
                 item:
                     show_details:

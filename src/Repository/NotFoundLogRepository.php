@@ -20,8 +20,9 @@ class NotFoundLogRepository extends EntityRepository implements NotFoundLogRepos
                 'MAX(nfl.createdAt) as lastOccurrence',
                 'MIN(nfl.createdAt) as firstOccurrence',
             ])
-            ->groupBy('nfl.urlDomain', 'nfl.urlSlug')
-            ->orderBy('logCount', 'DESC');
+            ->groupBy('nfl.urlDomain')
+            ->addGroupBy('nfl.urlSlug')
+            ->orderBy('COUNT(nfl.id)', 'DESC');
     }
 
     /**
