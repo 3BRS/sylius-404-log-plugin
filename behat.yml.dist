@@ -5,19 +5,19 @@ imports:
 default:
     extensions:
         Behat\MinkExtension:
-            base_url: "http://localhost:8080/"
+            base_url: 'http://127.0.0.1'
             default_session: symfony
             sessions:
                 symfony:
                     symfony: ~
+            show_auto: false
 
         FriendsOfBehat\SymfonyExtension:
             bootstrap: tests/Application/config/bootstrap.php
             kernel:
-                class: Tests\ThreeBRS\MailChimpPlugin\Application\Kernel
+                class: Tests\ThreeBRS\Sylius404LogPlugin\Kernel
+                path: tests/Application/Kernel.php
+                environment: test
+                debug: true
 
         FriendsOfBehat\VariadicExtension: ~
-
-        FriendsOfBehat\SuiteSettingsExtension:
-            paths:
-                - "features"

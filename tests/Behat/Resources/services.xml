@@ -1,16 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-    <services>
-        <defaults public="true" />
-        <!-- Put your Behat services here -->
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-        <service id="acme_sylius_example.context.ui.shop.welcome" class="Tests\Acme\SyliusExamplePlugin\Behat\Context\Ui\Shop\WelcomeContext">
-            <argument type="service" id="acme_sylius_example.page.shop.static_welcome" />
-            <argument type="service" id="acme_sylius_example.page.shop.dynamic_welcome" />
+    <services>
+        <defaults public="true"/>
+
+        <!-- Setup Contexts -->
+        <service id="tests.three_brs.sylius_404_log_plugin.behat.context.setup.not_found_log"
+                 class="Tests\ThreeBRS\Sylius404LogPlugin\Behat\Context\Setup\NotFoundLogContext">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="sylius.behat.shared_storage"/>
+            <tag name="fob.context_service"/>
         </service>
 
-        <service id="acme_sylius_example.page.shop.static_welcome" class="Tests\Acme\SyliusExamplePlugin\Behat\Page\Shop\StaticWelcomePage" parent="sylius.behat.symfony_page" public="false" />
-        <service id="acme_sylius_example.page.shop.dynamic_welcome" class="Tests\Acme\SyliusExamplePlugin\Behat\Page\Shop\DynamicWelcomePage" parent="sylius.behat.symfony_page" public="false" />
+        <!-- UI Contexts -->
+        <service id="tests.three_brs.sylius_404_log_plugin.behat.context.ui.admin.managing_404_logs"
+                 class="Tests\ThreeBRS\Sylius404LogPlugin\Behat\Context\Ui\Admin\Managing404LogsContext">
+            <argument type="service" id="Tests\ThreeBRS\Sylius404LogPlugin\Behat\Page\Admin\NotFoundLog\IndexPageInterface"/>
+            <argument type="service" id="Tests\ThreeBRS\Sylius404LogPlugin\Behat\Page\Admin\AggregatedLog\IndexPageInterface"/>
+            <argument type="service" id="Tests\ThreeBRS\Sylius404LogPlugin\Behat\Page\Admin\AggregatedLog\DetailsPageInterface"/>
+            <argument type="service" id="sylius.behat.notification_checker"/>
+            <argument type="service" id="sylius.behat.notification_accessor"/>
+            <tag name="fob.context_service"/>
+        </service>
+
+        <!-- Page Objects - NotFoundLog -->
+        <service id="Tests\ThreeBRS\Sylius404LogPlugin\Behat\Page\Admin\NotFoundLog\IndexPageInterface"
+                 class="Tests\ThreeBRS\Sylius404LogPlugin\Behat\Page\Admin\NotFoundLog\IndexPage"
+                 parent="sylius.behat.page.admin.crud.index" public="false">
+            <argument type="string">three_brs_sylius_404_log_plugin_admin_not_found_log_index</argument>
+        </service>
+
+        <!-- Page Objects - AggregatedLog -->
+        <service id="Tests\ThreeBRS\Sylius404LogPlugin\Behat\Page\Admin\AggregatedLog\IndexPageInterface"
+                 class="Tests\ThreeBRS\Sylius404LogPlugin\Behat\Page\Admin\AggregatedLog\IndexPage"
+                 parent="sylius.behat.symfony_page" public="false">
+        </service>
+
+        <service id="Tests\ThreeBRS\Sylius404LogPlugin\Behat\Page\Admin\AggregatedLog\DetailsPageInterface"
+                 class="Tests\ThreeBRS\Sylius404LogPlugin\Behat\Page\Admin\AggregatedLog\DetailsPage"
+                 parent="sylius.behat.symfony_page" public="false">
+        </service>
     </services>
 </container>

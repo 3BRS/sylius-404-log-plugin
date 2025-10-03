@@ -15,7 +15,7 @@
                 <div class="column">
                     <div class="ui statistics">
                         <div class="statistic">
-                            <div class="value">{{ stats.totalCount }}</div>
+                            <div class="value" {{ sylius_test_html_attribute('total-count') }}>{{ stats.totalCount }}</div>
                             <div class="label">{{ 'three_brs_sylius_404_log_plugin.ui.total_occurrences'|trans }}</div>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
             </h3>
 
             {% if logs|length > 0 %}
-                <table class="ui celled table">
+                <table class="ui celled table" {{ sylius_test_html_attribute('individual-logs-table') }}>
                     <thead>
                         <tr>
                             <th>{{ 'three_brs_sylius_404_log_plugin.ui.created_at'|trans }}</th>

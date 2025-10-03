@@ -110,7 +110,7 @@ class CleanupNotFoundLogsCommandTest extends TestCase
         // First batch deletes 50, second batch deletes 50, third batch returns 0 (no more logs)
         $this->mockRepository
             ->expects($this->exactly(3))
-            ->method('deleteLogsOlderThanInBatch')
+            ->method('deleteLogsOlderThan')
             ->willReturnOnConsecutiveCalls(50, 50, 0);
 
         // Entity manager should be cleared after each batch
@@ -143,7 +143,7 @@ class CleanupNotFoundLogsCommandTest extends TestCase
         // Three batches: 100, 100, 50, then 0
         $this->mockRepository
             ->expects($this->exactly(4))
-            ->method('deleteLogsOlderThanInBatch')
+            ->method('deleteLogsOlderThan')
             ->with(
                 $this->isInstanceOf(\DateTimeInterface::class),
                 $customBatchSize
@@ -193,7 +193,7 @@ class CleanupNotFoundLogsCommandTest extends TestCase
             ->willReturn($logsCount);
 
         $this->mockRepository
-            ->method('deleteLogsOlderThanInBatch')
+            ->method('deleteLogsOlderThan')
             ->willReturnOnConsecutiveCalls($logsCount, 0);
 
         $this->commandTester->execute(['days' => (string) $days]);
@@ -216,7 +216,7 @@ class CleanupNotFoundLogsCommandTest extends TestCase
         // First call returns 0, so loop should exit immediately
         $this->mockRepository
             ->expects($this->once())
-            ->method('deleteLogsOlderThanInBatch')
+            ->method('deleteLogsOlderThan')
             ->willReturn(0);
 
         // Entity manager should not be called since no logs were deleted
@@ -238,7 +238,7 @@ class CleanupNotFoundLogsCommandTest extends TestCase
 
         $this->mockRepository
             ->expects($this->exactly(2))
-            ->method('deleteLogsOlderThanInBatch')
+            ->method('deleteLogsOlderThan')
             ->withConsecutive(
                 [$this->isInstanceOf(\DateTimeInterface::class), 1000],
                 [$this->isInstanceOf(\DateTimeInterface::class), 1000]

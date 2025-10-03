@@ -19,7 +19,7 @@ services:
             #            XDEBUG_MODE: "off"
             XDEBUG_MODE: "debug"
             #            XDEBUG_MODE: "profile"
-            PHP_IDE_CONFIG: "serverName=dev"
+            PHP_IDE_CONFIG: "serverName=3brsSylius404Plugin"
         volumes:
             - .:/src:cached
             - ./:/srv/sylius:delegated

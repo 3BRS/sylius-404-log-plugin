@@ -213,7 +213,7 @@ class NotFoundLogRepository extends EntityRepository implements NotFoundLogRepos
             ->getSingleScalarResult();
     }
 
-    public function deleteLogsOlderThanInBatch(\DateTimeInterface $date, int $batchSize): int
+    public function deleteLogsOlderThan(\DateTimeInterface $date, int $batchSize): int
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->delete($this->getClassName(), 'nfl')
@@ -221,6 +221,6 @@ class NotFoundLogRepository extends EntityRepository implements NotFoundLogRepos
            ->setParameter('date', $date)
            ->setMaxResults($batchSize);
 
-        return $qb->getQuery()->execute();
+        return (int) $qb->getQuery()->execute();
     }
 }

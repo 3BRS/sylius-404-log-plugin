@@ -43,6 +43,7 @@ class SetonoRedirectCreatedListener
 
         // Delete logs for specific channels/domains
         foreach ($channelsArray as $channel) {
+            assert(is_object($channel));
             if (method_exists($channel, 'getHostname')) {
                 $hostname = $channel->getHostname();
                 if ($hostname) {
