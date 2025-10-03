@@ -4,8 +4,10 @@ includes:
 
 parameters:
     symfony:
-        container_xml_path: tests/Application/var/cache/dev/Tests_Acme_SyliusExamplePlugin_Application_KernelDevDebugContainer.xml
+        container_xml_path: tests/Application/var/cache/dev/Tests_ThreeBRS_Sylius404LogPlugin_KernelDevDebugContainer.xml
 
     excludePaths:
         - 'tests/'
 
+    ignoreErrors:
+        - '#Cannot cast mixed to int#'

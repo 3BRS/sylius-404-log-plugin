@@ -88,7 +88,7 @@ class CleanupNotFoundLogsCommand extends Command
         $progressBar->start();
 
         while (true) {
-            $deletedBatch = $this->notFoundLogRepository->deleteLogsOlderThanInBatch($cutoffDate, $batchSize);
+            $deletedBatch = $this->notFoundLogRepository->deleteLogsOlderThan($cutoffDate, $batchSize);
 
             if ($deletedBatch === 0) {
                 break;

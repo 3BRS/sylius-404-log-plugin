@@ -1,14 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 IFS=$'\n\t'
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # project root
 cd "$(dirname "$DIR")"
 
 set -x
-vendor/bin/phpstan analyse \
-	--level 6 \
-	--memory-limit 1G \
-	--configuration phpstan.neon \
-	src
+
+if [ ! -f tests/Application/var/cache/dev/Tests_ThreeBRS_Sylius404LogPlugin_KernelDevDebugContainer.xml ]; then
+  php bin/console --env=dev cache:warmup --no-optional-warmers
+fi
+
+php --no-php-ini --define memory_limit=1G vendor/bin/phpstan analyse \
+    --debug \
+    --level max \
+    src tests \
+    "$@"

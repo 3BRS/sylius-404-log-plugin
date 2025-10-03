@@ -46,7 +46,8 @@
 	"autoload": {
 		"psr-4": {
 			"ThreeBRS\\Sylius404LogPlugin\\": "src/",
-			"Tests\\Acme\\SyliusExamplePlugin\\": "tests/"
+			"Tests\\ThreeBRS\\Sylius404LogPlugin\\": "tests/Application/",
+			"Tests\\ThreeBRS\\Sylius404LogPlugin\\Behat\\": "tests/Behat/"
 		}
 	},
 	"autoload-dev": {

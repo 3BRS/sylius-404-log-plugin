@@ -55,5 +55,5 @@ interface NotFoundLogRepositoryInterface extends RepositoryInterface
     /**
      * Delete logs older than specified date in batches
      */
-    public function deleteLogsOlderThanInBatch(\DateTimeInterface $date, int $batchSize): int;
+    public function deleteLogsOlderThan(\DateTimeInterface $date, int $batchSize): int;
 }
