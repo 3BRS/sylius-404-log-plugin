@@ -1,0 +1,20 @@
+{% import '@SyliusAdmin/shared/helper/header.html.twig' as header %}
+
+{% set domain = hookable_metadata.context.domain %}
+{% set slug = hookable_metadata.context.slug %}
+{% set stats = hookable_metadata.context.stats %}
+
+<div class="col-12 col-md-6">
+    <div class="d-md-flex gap-2 align-items-center">
+        {{ header.h1(
+            'three_brs_sylius_404_log_plugin.ui.details'|trans,
+            'chart bar outline',
+            (domain ~ slug)
+        ) }}
+    </div>
+    <div class="mt-2">
+        <span class="badge bg-primary text-white mb-3" {{ sylius_test_html_attribute('total-count') }}>
+            {{ stats.totalCount }} {{ 'three_brs_sylius_404_log_plugin.ui.total_occurrences'|trans }}
+        </span>
+    </div>
+</div>

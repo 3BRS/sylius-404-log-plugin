@@ -1,0 +1,29 @@
+{% import '@SyliusAdmin/shared/helper/button.html.twig' as button %}
+
+{% set domain = hookable_metadata.context.domain %}
+{% set slug = hookable_metadata.context.slug %}
+
+<div class="col-12 col-md-6 text-md-end">
+    {% if is_setono_redirect_plugin_installed() %}
+        <a href="{{ path('setono_sylius_redirect_admin_redirect_create') }}"
+           class="btn btn-success me-2"
+           onclick="localStorage.setItem('prefill_source', '{{ slug|e('js') }}'); localStorage.setItem('prefill_domain', '{{ domain|e('js') }}');">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon" aria-hidden="true">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m-7-7h14"></path>
+            </svg>
+            {{ 'three_brs_sylius_404_log_plugin.ui.create_redirect_for_path'|trans }}
+        </a>
+    {% endif %}
+    {{ button.default({
+        url: path('three_brs_sylius_404_log_plugin_admin_aggregated_log_details_delete_all', {
+            'domain': domain,
+            'slug': slug
+        }),
+        text: 'three_brs_sylius_404_log_plugin.ui.delete_all_logs'|trans,
+        icon: 'tabler:trash',
+        class: 'btn-outline-danger',
+        attr: {
+            onclick: "return confirm('" ~ 'three_brs_sylius_404_log_plugin.ui.confirm_deletion'|trans ~ "')"
+        }
+    }) }}
+</div>

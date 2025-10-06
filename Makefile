@@ -103,9 +103,11 @@ bare-fixtures:
 var:
 	docker compose run --rm --user root php rm -fr tests/Application/var
 	mkdir -p tests/Application/var/log
+	mkdir -p tests/Application/public/media/image
 	touch tests/Application/var/log/test.log
 	touch tests/Application/var/log/dev.log
 	chmod -R 0777 tests/Application/var
+	chmod -R 0777 tests/Application/public/media
 
 fixtures: schema-reset bare-fixtures var
 

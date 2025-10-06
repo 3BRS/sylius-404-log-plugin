@@ -1,0 +1,21 @@
+sylius_twig_hooks:
+    hooks:
+        'three_brs_sylius_404_log_plugin.aggregated_log.details.content':
+            sections:
+                template: '@ThreeBRSSylius404LogPlugin/twig_hooks/admin/aggregated_log/details/content/sections.html.twig'
+
+        'three_brs_sylius_404_log_plugin.aggregated_log.details.content.header':
+            breadcrumbs:
+                enabled: false
+
+        'three_brs_sylius_404_log_plugin.aggregated_log.details.content.sections':
+            general:
+                template: '@ThreeBRSSylius404LogPlugin/twig_hooks/admin/aggregated_log/details/content/sections/general.html.twig'
+
+        'three_brs_sylius_404_log_plugin.aggregated_log.details.content.header.title_block':
+            title:
+                template: '@ThreeBRSSylius404LogPlugin/twig_hooks/admin/aggregated_log/details/content/header/title_block/title.html.twig'
+                priority: 100
+            actions:
+                template: '@ThreeBRSSylius404LogPlugin/twig_hooks/admin/aggregated_log/details/content/header/title_block/actions.html.twig'
+                priority: 90

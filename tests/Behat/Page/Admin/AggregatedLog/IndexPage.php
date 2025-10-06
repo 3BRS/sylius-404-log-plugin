@@ -6,6 +6,7 @@ namespace Tests\ThreeBRS\Sylius404LogPlugin\Behat\Page\Admin\AggregatedLog;
 
 use Behat\Mink\Element\NodeElement;
 use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
+use Webmozart\Assert\Assert;
 
 final class IndexPage extends SymfonyPage implements IndexPageInterface
 {
@@ -16,18 +17,34 @@ final class IndexPage extends SymfonyPage implements IndexPageInterface
 
     public function countItems(): int
     {
-        $rows = $this->getDocument()->findAll('css', 'table tbody tr');
+        $rows = $this->getTable()?->findAll('css', 'tbody tr') ?? [];
 
         return count($rows);
     }
 
-    public function hasAggregatedLogForUrl(string $domain, string $urlSlug): bool
+    private function getTable(): ?NodeElement
     {
-        $rows = $this->getDocument()->findAll('css', 'table tbody tr');
+        $tables = $this->getDocument()->findAll('css', '[data-test-aggregated-table]');
+        if (count($tables) === 0) {
+            return null;
+        }
+        Assert::count($tables, 1, 'Multiple tables found with data-test-aggregated-table attribute.');
+        $table = reset($tables);
+
+        Assert::isInstanceOf($table, NodeElement::class);
+
+        return $table;
+    }
+
+    public function hasAggregatedLogForUrl(
+        string $domain,
+        string $urlSlug,
+    ): bool {
+        $rows = $this->getTable()?->findAll('css', 'tbody tr') ?? [];
 
         foreach ($rows as $row) {
             $domainCell = $row->find('css', 'td:nth-child(1)');
-            $slugCell = $row->find('css', 'td:nth-child(2)');
+            $slugCell   = $row->find('css', 'td:nth-child(2)');
 
             if ($domainCell && $slugCell) {
                 if (trim($domainCell->getText()) === $domain && trim($slugCell->getText()) === $urlSlug) {
@@ -39,18 +56,20 @@ final class IndexPage extends SymfonyPage implements IndexPageInterface
         return false;
     }
 
-    public function getOccurrenceCount(string $domain, string $urlSlug): ?int
-    {
-        $rows = $this->getDocument()->findAll('css', 'table tbody tr');
+    public function getOccurrenceCount(
+        string $domain,
+        string $urlSlug,
+    ): ?int {
+        $rows = $this->getTable()?->findAll('css', 'tbody tr') ?? [];
 
         foreach ($rows as $row) {
             $domainCell = $row->find('css', 'td:nth-child(1)');
-            $slugCell = $row->find('css', 'td:nth-child(2)');
-            $countCell = $row->find('css', 'td:nth-child(3)');
+            $slugCell   = $row->find('css', 'td:nth-child(2)');
+            $countCell  = $row->find('css', 'td:nth-child(3)');
 
             if ($domainCell && $slugCell && $countCell) {
                 if (trim($domainCell->getText()) === $domain && trim($slugCell->getText()) === $urlSlug) {
-                    return (int) trim($countCell->getText());
+                    return (int)trim($countCell->getText());
                 }
             }
         }
@@ -60,42 +79,56 @@ final class IndexPage extends SymfonyPage implements IndexPageInterface
 
     public function filterByDomain(string $domain): void
     {
-        $this->getElement('domain_filter')->setValue($domain);
-        $this->getElement('filter_button')->click();
+        $input = $this->getElement('domain_filter');
+        $input->setValue($domain);
+        $form = $this->getDocument()->find('xpath', '//form[.//input[@name="domain"]]');
+        Assert::notNull($form, 'Filter form not found');
+        $form->submit();
     }
 
     public function filterByUrlPath(string $urlPath): void
     {
-        $this->getElement('url_path_filter')->setValue($urlPath);
-        $this->getElement('filter_button')->click();
+        $input = $this->getElement('url_path_filter');
+        $input->setValue($urlPath);
+        $form = $this->getDocument()->find('xpath', '//form[.//input[@name="urlPath"]]');
+        Assert::notNull($form, 'Filter form not found');
+        $form->submit();
     }
 
     public function filterByMinCount(int $minCount): void
     {
-        $this->getElement('min_count_filter')->setValue((string) $minCount);
-        $this->getElement('filter_button')->click();
+        $input = $this->getElement('min_count_filter');
+        $input->setValue((string)$minCount);
+        $form = $this->getDocument()->find('xpath', '//form[.//input[@name="minCount"]]');
+        Assert::notNull($form, 'Filter form not found');
+        $form->submit();
     }
 
     public function filterByMaxCount(int $maxCount): void
     {
-        $this->getElement('max_count_filter')->setValue((string) $maxCount);
-        $this->getElement('filter_button')->click();
+        $input = $this->getElement('max_count_filter');
+        $input->setValue((string)$maxCount);
+        $form = $this->getDocument()->find('xpath', '//form[.//input[@name="maxCount"]]');
+        Assert::notNull($form, 'Filter form not found');
+        $form->submit();
     }
 
-    public function deleteLogsFor(string $domain, string $urlSlug): void
-    {
+    public function deleteLogsFor(
+        string $domain,
+        string $urlSlug,
+    ): void {
         $row = $this->findRowForLog($domain, $urlSlug);
-        if ($row) {
-            $deleteButton = $row->find('css', 'a.red.button i.trash.icon');
-            if ($deleteButton) {
-                // Click the parent link, not the icon
-                $deleteButton->getParent()->click();
-            }
-        }
+        Assert::notNull($row);
+        // Find delete button - it's a Bootstrap button with btn-outline-danger class
+        $deleteButton = $row->find('css', 'a.btn-outline-danger, a.btn.btn-outline-danger');
+        Assert::notNull($deleteButton);
+        $deleteButton->click();
     }
 
-    public function clickDetails(string $domain, string $urlSlug): void
-    {
+    public function clickDetails(
+        string $domain,
+        string $urlSlug,
+    ): void {
         $row = $this->findRowForLog($domain, $urlSlug);
         if ($row) {
             $detailsLink = $row->find('css', 'a.details-link, a[href*="details"]');
@@ -105,13 +138,15 @@ final class IndexPage extends SymfonyPage implements IndexPageInterface
         }
     }
 
-    private function findRowForLog(string $domain, string $urlSlug): ?NodeElement
-    {
-        $rows = $this->getDocument()->findAll('css', 'table tbody tr');
+    private function findRowForLog(
+        string $domain,
+        string $urlSlug,
+    ): ?NodeElement {
+        $rows = $this->getTable()?->findAll('css', 'tbody tr') ?? [];
 
         foreach ($rows as $row) {
             $domainCell = $row->find('css', 'td:nth-child(1)');
-            $slugCell = $row->find('css', 'td:nth-child(2)');
+            $slugCell   = $row->find('css', 'td:nth-child(2)');
 
             if ($domainCell && $slugCell) {
                 if (trim($domainCell->getText()) === $domain && trim($slugCell->getText()) === $urlSlug) {
@@ -126,11 +161,10 @@ final class IndexPage extends SymfonyPage implements IndexPageInterface
     protected function getDefinedElements(): array
     {
         return array_merge(parent::getDefinedElements(), [
-            'domain_filter' => 'input[name="domain"]',
-            'url_path_filter' => 'input[name="urlPath"]',
+            'domain_filter'    => 'input[name="domain"]',
+            'url_path_filter'  => 'input[name="urlPath"]',
             'min_count_filter' => 'input[name="minCount"]',
             'max_count_filter' => 'input[name="maxCount"]',
-            'filter_button' => 'button[type="submit"]',
         ]);
     }
 }

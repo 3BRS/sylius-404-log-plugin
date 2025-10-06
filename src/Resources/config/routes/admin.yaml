@@ -2,7 +2,7 @@ three_brs_sylius_404_log_plugin_admin_not_found_log:
     resource: |
         alias: three_brs_sylius_404_log_plugin.not_found_log
         section: admin
-        templates: "@SyliusAdmin\\Crud"
+        templates: "@SyliusAdmin/shared/crud"
         only: ['index', 'delete']
         grid: three_brs_sylius_admin_404_log_plugin_not_found_log
         vars:
@@ -20,7 +20,6 @@ three_brs_sylius_404_log_plugin_admin_aggregated_log_index:
         _controller: three_brs_sylius_404_log_plugin.controller.aggregated_log::indexAction
         _sylius:
             grid: three_brs_sylius_admin_404_log_plugin_aggregated
-            template: "@SyliusAdmin/Crud/index.html.twig"
             vars:
                 header: three_brs_sylius_404_log_plugin.ui.aggregated_logs
                 subheader: three_brs_sylius_404_log_plugin.ui.aggregated_logs
