@@ -6,6 +6,8 @@ use Symfony\Component\Dotenv\Dotenv;
 
 require dirname(__DIR__).'../../../vendor/autoload.php';
 
+ini_set('memory_limit', $_SERVER['APP_MEMORY_LIMIT'] ?? ($_ENV['APP_MEMORY_LIMIT'] ?? '512M'));
+
 // Load cached env vars if the .env.local.php file exists
 // Run "composer dump-env prod" to create it (requires symfony/flex >=1.2)
 if (is_array($env = @include dirname(__DIR__) . '/.env.local.php')) {

@@ -20,8 +20,8 @@
             <argument type="service" id="Tests\ThreeBRS\Sylius404LogPlugin\Behat\Page\Admin\NotFoundLog\IndexPageInterface"/>
             <argument type="service" id="Tests\ThreeBRS\Sylius404LogPlugin\Behat\Page\Admin\AggregatedLog\IndexPageInterface"/>
             <argument type="service" id="Tests\ThreeBRS\Sylius404LogPlugin\Behat\Page\Admin\AggregatedLog\DetailsPageInterface"/>
-            <argument type="service" id="sylius.behat.notification_checker"/>
-            <argument type="service" id="sylius.behat.notification_accessor"/>
+            <argument type="service" id="sylius.behat.notification_checker.admin"/>
+            <argument type="service" id="sylius.behat.notification_accessor.admin"/>
             <tag name="fob.context_service"/>
         </service>
 

@@ -1,0 +1,10 @@
+{% import '@SyliusAdmin/shared/helper/button.html.twig' as button %}
+
+<div class="col-12 col-md-6 text-md-end">
+    {{ button.default({
+        url: path('three_brs_sylius_404_log_plugin_admin_not_found_log_index'),
+        text: 'three_brs_sylius_404_log_plugin.ui.not_found_logs'|trans,
+        icon: 'list',
+        class: 'btn-outline-primary'
+    }) }}
+</div>

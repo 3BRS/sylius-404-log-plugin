@@ -130,7 +130,9 @@ php bin/console three-brs:404-logs:cleanup 30
 
 ### Setono Sylius Redirect Plugin
 
-This plugin works excellently together with [setono/sylius-redirect-plugin](https://github.com/Setono/SyliusRedirectPlugin) to provide a complete 404 error management solution.
+> **Note:** The [setono/sylius-redirect-plugin](https://packagist.org/packages/setono/sylius-redirect-plugin) is currently not available for Sylius 2.0. For Sylius 2.0 compatibility, please check the package page for updates or consider alternative redirect solutions.
+
+This plugin works excellently together with [setono/sylius-redirect-plugin](https://packagist.org/packages/setono/sylius-redirect-plugin) to provide a complete 404 error management solution.
 
 **Why combine both plugins?**
 - **404 Log Plugin**: Identifies which URLs are generating 404 errors
