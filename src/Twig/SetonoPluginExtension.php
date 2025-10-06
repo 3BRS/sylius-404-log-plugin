@@ -20,7 +20,7 @@ class SetonoPluginExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('is_setono_redirect_plugin_installed', [$this, 'isSetonoRedirectPluginInstalled']),
+            new TwigFunction('is_setono_redirect_plugin_installed', $this->isSetonoRedirectPluginInstalled(...)),
         ];
     }
 
