@@ -77,7 +77,7 @@ class NotFoundLogRepository extends EntityRepository implements NotFoundLogRepos
 
     public function createQueryBuilderForGrid(): QueryBuilder
     {
-        // Pro standardní grid vracíme normální QueryBuilder
+        // For standard grid, return a normal QueryBuilder
         return $this->createQueryBuilder('nfl')
             ->orderBy('nfl.createdAt', 'DESC');
     }
@@ -92,7 +92,7 @@ class NotFoundLogRepository extends EntityRepository implements NotFoundLogRepos
         $startDate = new \DateTime();
         $startDate->modify("-{$days} days");
 
-        // Použijeme nativní SQL dotaz pro lepší kompatibilitu
+        // Use native SQL query for better compatibility
         $connection = $this->getEntityManager()->getConnection();
 
         $sql = '
@@ -112,7 +112,7 @@ class NotFoundLogRepository extends EntityRepository implements NotFoundLogRepos
 
         $result = $stmt->executeQuery()->fetchAllAssociative();
 
-        // Vyplnění chybějících dnů nulami
+        // Fill missing days with zeros
         $chartData = [];
         $currentDate = clone $startDate;
         $now = new \DateTime();

@@ -13,7 +13,7 @@ class SetonoRedirectCreatedListener
     ) {
     }
 
-    // Doctrine entity listener - entity se předává přímo jako parametr
+    // Doctrine entity listener - entity is passed directly as a parameter
     public function postPersist(\Setono\SyliusRedirectPlugin\Model\RedirectInterface $entity): void
     {
         $sourceUrl = $entity->getSource();

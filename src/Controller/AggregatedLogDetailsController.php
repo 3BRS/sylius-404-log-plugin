@@ -55,12 +55,12 @@ class AggregatedLogDetailsController extends AbstractController
             return $this->redirectToRoute('three_brs_sylius_404_log_plugin_admin_aggregated_log_index');
         }
 
-        // Najdeme všechny logy pro danou doménu a slug
+        // Find all logs for the given domain and slug
         $logs = $this->notFoundLogRepository->findByDomainAndSlug($domain, $slug);
         $count = count($logs);
 
         if ($count > 0) {
-            // Smažeme všechny nalezené logy
+            // Delete all found logs
             foreach ($logs as $log) {
                 $this->entityManager->remove($log);
             }

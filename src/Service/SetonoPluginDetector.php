@@ -17,7 +17,7 @@ class SetonoPluginDetector
 
     public function isSetonoRedirectPluginInstalled(): bool
     {
-        // Kontrola 1: Je bundle zaregistrován?
+        // Check 1: Is the bundle registered?
         $bundles = $this->kernel->getBundles();
         foreach ($bundles as $bundle) {
             if (str_contains(get_class($bundle), 'SetonoSyliusRedirectPlugin')) {
@@ -25,7 +25,7 @@ class SetonoPluginDetector
             }
         }
 
-        // Kontrola 2: Existuje třída?
+        // Check 2: Does the class exist?
         if (class_exists('Setono\SyliusRedirectPlugin\SetonoSyliusRedirectPlugin')) {
             return true;
         }

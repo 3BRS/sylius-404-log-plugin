@@ -24,21 +24,21 @@ class AggregatedLogController extends AbstractController
 
     public function indexAction(Request $request): Response
     {
-        // Pagination parametry
+        // Pagination parameters
         $page = max(1, $request->query->getInt('page', 1));
-        $limit = 20; // Počet záznamů na stránku
+        $limit = 20; // Number of records per page
 
-        // Získáme filtry z requestu
+        // Get filters from request
         $domainFilter = $request->query->get('domain', '');
         $urlPathFilter = $request->query->get('urlPath', '');
         $minCountFilter = $request->query->get('minCount', '');
         $maxCountFilter = $request->query->get('maxCount', '');
 
-        // Použijeme přímý SQL dotaz místo QueryBuilder pro PostgreSQL kompatibilitu
+        // Use direct SQL query instead of QueryBuilder for PostgreSQL compatibility
         $connection = $this->entityManager->getConnection();
 
-        // Sestavíme základní SQL dotaz
-        $sql = 'SELECT 
+        // Build basic SQL query
+        $sql = 'SELECT
             nfl.url_domain as "urlDomain",
             nfl.url_slug as "urlSlug",
             COUNT(nfl.id) as "logCount",
@@ -49,7 +49,7 @@ class AggregatedLogController extends AbstractController
         $whereConditions = [];
         $parameters = [];
 
-        // Přidáme WHERE podmínky podle filtrů
+        // Add WHERE conditions based on filters
         if (!empty($domainFilter)) {
             $whereConditions[] = 'nfl.url_domain LIKE :domain';
             $parameters['domain'] = '%' . $domainFilter . '%';
@@ -60,15 +60,15 @@ class AggregatedLogController extends AbstractController
             $parameters['urlPath'] = '%' . $urlPathFilter . '%';
         }
 
-        // Přidáme WHERE klauzuli pokud existují podmínky
+        // Add WHERE clause if conditions exist
         if (!empty($whereConditions)) {
             $sql .= ' WHERE ' . implode(' AND ', $whereConditions);
         }
 
-        // Přidáme GROUP BY
+        // Add GROUP BY
         $sql .= ' GROUP BY nfl.url_domain, nfl.url_slug';
 
-        // Přidáme HAVING podmínky pro count filtry
+        // Add HAVING conditions for count filters
         $havingConditions = [];
 
         if (!empty($minCountFilter) && is_numeric($minCountFilter)) {
@@ -85,10 +85,10 @@ class AggregatedLogController extends AbstractController
             $sql .= ' HAVING ' . implode(' AND ', $havingConditions);
         }
 
-        // Přidáme ORDER BY
+        // Add ORDER BY
         $sql .= ' ORDER BY COUNT(nfl.id) DESC';
 
-        // Nejprve spočítáme celkový počet záznamů pro pagination
+        // First, count total records for pagination
         $countStmt = $connection->prepare($sql);
         foreach ($parameters as $key => $value) {
             $countStmt->bindValue($key, $value);
@@ -97,18 +97,18 @@ class AggregatedLogController extends AbstractController
         $totalItems = count($countResults);
         $totalPages = ceil($totalItems / $limit);
 
-        // Přidáme LIMIT pro paginaci (kompatibilní s MySQL i PostgreSQL)
+        // Add LIMIT for pagination (compatible with both MySQL and PostgreSQL)
         $offset = ($page - 1) * $limit;
         $databasePlatform = $connection->getDatabasePlatform()->getName();
 
         if ($databasePlatform === 'postgresql') {
             $sql .= ' LIMIT ' . $limit . ' OFFSET ' . $offset;
         } else {
-            // MySQL syntaxe (a většina ostatních databází)
+            // MySQL syntax (and most other databases)
             $sql .= ' LIMIT ' . $offset . ', ' . $limit;
         }
 
-        // Získáme data pro aktuální stránku
+        // Get data for current page
         $dataStmt = $connection->prepare($sql);
         foreach ($parameters as $key => $value) {
             $dataStmt->bindValue($key, $value);
@@ -145,12 +145,12 @@ class AggregatedLogController extends AbstractController
             return $this->redirectToRoute('three_brs_sylius_404_log_plugin_admin_aggregated_log_index');
         }
 
-        // Najdeme všechny logy pro danou doménu a slug
+        // Find all logs for the given domain and slug
         $logs = $this->repository->findByDomainAndSlug($domain, $slug);
         $count = count($logs);
 
         if ($count > 0) {
-            // Smažeme všechny nalezené logy
+            // Delete all found logs
             foreach ($logs as $log) {
                 $this->entityManager->remove($log);
             }

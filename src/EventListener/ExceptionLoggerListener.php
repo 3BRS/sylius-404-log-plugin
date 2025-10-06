@@ -37,14 +37,14 @@ class ExceptionLoggerListener
     {
         $exception = $event->getThrowable();
 
-        // Pouze logujeme 404 chyby
+        // Only log 404 errors
         if (!$exception instanceof NotFoundHttpException) {
             return;
         }
 
         $request = $event->getRequest();
 
-        // Nelogujeme admin sekci ani API
+        // Don't log admin section or API
         if ($this->shouldSkipLogging($request)) {
             return;
         }
@@ -56,7 +56,7 @@ class ExceptionLoggerListener
     {
         $pathInfo = $request->getPathInfo();
 
-        // Použijeme konfigurovatelné vzory místo hardcoded
+        // Use configurable patterns instead of hardcoded values
         foreach ($this->skipPatterns as $pattern) {
             if (strpos($pathInfo, $pattern) !== false) {
                 return true;

@@ -1,15 +1,15 @@
 version: 2.1
 
 workflows:
-    sylius1.13-php8.1+:
+    sylius2.0-php8.2+:
         jobs:
             -   build:
                     name: php-<<matrix.php_version>>-sylius-<< matrix.sylius_version >>-symfony-<< matrix.symfony_version >>
                     matrix:
                         parameters:
-                            sylius_version: [ "1.13", "1.14" ]
-                            php_version: [ "8.1", "8.2", "8.3" ]
-                            symfony_version: [ "5.4", "6.4" ]
+                            sylius_version: [ "2.0" ]
+                            php_version: [ "8.2", "8.3" ]
+                            symfony_version: [ "6.4", "7.1" ]
 
 jobs:
     build:
@@ -64,6 +64,7 @@ jobs:
             -   run: APP_ENV=dev bin/ecs.sh --clear-cache
             -   run: APP_ENV=dev bin/symfony-lint.sh
             -   run: APP_ENV=dev bin/phpunit
+            -   run: bin/behat.sh
 
             # COMPOSER PREFER DIST #
             -   run: COMPOSER_MEMORY_LIMIT=-1 composer update --no-interaction --prefer-dist --no-plugins
@@ -77,3 +78,4 @@ jobs:
             -   run: APP_ENV=dev bin/ecs.sh --clear-cache
             -   run: APP_ENV=dev bin/symfony-lint.sh
             -   run: APP_ENV=dev bin/phpunit
+            -   run: bin/behat.sh
