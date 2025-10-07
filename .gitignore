@@ -2,13 +2,13 @@
 /node_modules/
 /composer.lock
 /.env
+/.envrc
 
 /etc/build/*
 !/etc/build/.gitkeep
 
 /tests/Application/yarn.lock
 
-.envrc.dist
 
 /compose.override.yaml
 /deploy/

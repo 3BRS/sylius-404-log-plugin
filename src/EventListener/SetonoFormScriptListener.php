@@ -22,8 +22,10 @@ class SetonoFormScriptListener implements EventSubscriberInterface
     /**
      * @param ChannelRepositoryInterface<ChannelInterface> $channelRepository
      */
-    public function __construct(ChannelRepositoryInterface $channelRepository, Environment $twig)
-    {
+    public function __construct(
+        ChannelRepositoryInterface $channelRepository,
+        Environment $twig,
+    ) {
         $this->channelRepository = $channelRepository;
         $this->twig = $twig;
     }
@@ -79,7 +81,7 @@ class SetonoFormScriptListener implements EventSubscriberInterface
             if ($hostname) {
                 // Extract domain keywords for matching
                 $domainParts = explode('.', $hostname);
-                $mainDomain = $domainParts[0] ?? '';
+                $mainDomain = $domainParts[0];
 
                 $mapping[$code] = $mainDomain;
             }

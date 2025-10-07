@@ -14,6 +14,7 @@ class SetonoRedirectCreatedListener
     }
 
     // Doctrine entity listener - entity is passed directly as a parameter
+    // @phpstan-ignore-next-line class.notFound
     public function postPersist(\Setono\SyliusRedirectPlugin\Model\RedirectInterface $entity): void
     {
         $sourceUrl = $entity->getSource();
