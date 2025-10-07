@@ -131,7 +131,7 @@ class ExceptionLoggerListenerTest extends TestCase
 
         $this->logger->expects($this->once())
             ->method('error')
-            ->with('Failed to log 404 error', $this->isType('array'));
+            ->with('Failed to log 404 error', $this->isArray());
 
         $this->listener->onKernelException($event);
     }

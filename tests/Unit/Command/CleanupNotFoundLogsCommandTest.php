@@ -239,9 +239,12 @@ class CleanupNotFoundLogsCommandTest extends TestCase
         $this->mockRepository
             ->expects($this->exactly(2))
             ->method('deleteLogsOlderThan')
-            ->withConsecutive(
-                [$this->isInstanceOf(\DateTimeInterface::class), 1000],
-                [$this->isInstanceOf(\DateTimeInterface::class), 1000]
+            ->with(
+                $this->isInstanceOf(\DateTimeInterface::class),
+                $this->callback(function (int $batchSize) {
+                    $this->assertSame(1000, $batchSize);
+                    return true;
+                })
             )
             ->willReturnOnConsecutiveCalls(1, 0);
 
