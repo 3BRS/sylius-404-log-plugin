@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ThreeBRS\Sylius404LogPlugin\Repository;
 
-use Doctrine\ORM\QueryBuilder;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use ThreeBRS\Sylius404LogPlugin\Entity\NotFoundLogInterface;
 
@@ -13,8 +12,6 @@ use ThreeBRS\Sylius404LogPlugin\Entity\NotFoundLogInterface;
  */
 interface NotFoundLogRepositoryInterface extends RepositoryInterface
 {
-    public function createAggregatedQueryBuilder(): QueryBuilder;
-
     /**
      * Finds all logs for a specific domain and slug.
      *
@@ -33,15 +30,6 @@ interface NotFoundLogRepositoryInterface extends RepositoryInterface
      * }
      */
     public function getAggregatedStats(string $domain, string $slug): array;
-
-    /**
-     * @return array{
-     *     count: int,
-     *     first_occurrence: \DateTimeInterface|null,
-     *     last_occurrence: \DateTimeInterface|null
-     * }|null
-     */
-    public function getAggregatedByDomainAndSlug(string $domain, string $slug): ?array;
 
     public function deleteByUrl(string $sourceUrl): void;
 

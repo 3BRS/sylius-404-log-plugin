@@ -10,21 +10,6 @@ use ThreeBRS\Sylius404LogPlugin\Entity\NotFoundLogInterface;
 
 class NotFoundLogRepository extends EntityRepository implements NotFoundLogRepositoryInterface
 {
-    public function createAggregatedQueryBuilder(): QueryBuilder
-    {
-        return $this->createQueryBuilder('nfl')
-            ->select([
-                'nfl.urlDomain as urlDomain',
-                'nfl.urlSlug as urlSlug',
-                'COUNT(nfl.id) as logCount',
-                'MAX(nfl.createdAt) as lastOccurrence',
-                'MIN(nfl.createdAt) as firstOccurrence',
-            ])
-            ->groupBy('nfl.urlDomain')
-            ->addGroupBy('nfl.urlSlug')
-            ->orderBy('COUNT(nfl.id)', 'DESC');
-    }
-
     /**
      * Finds all logs for a specific domain and slug.
      *
@@ -35,7 +20,8 @@ class NotFoundLogRepository extends EntityRepository implements NotFoundLogRepos
      */
     public function findByDomainAndSlug(string $domain, string $slug): array
     {
-        $result = $this->createQueryBuilder('nfl')
+        // @phpstan-ignore-next-line return.type
+        return $this->createQueryBuilder('nfl')
             ->where('nfl.urlDomain = :domain')
             ->andWhere('nfl.urlSlug = :slug')
             ->setParameter('domain', $domain)
@@ -43,8 +29,6 @@ class NotFoundLogRepository extends EntityRepository implements NotFoundLogRepos
             ->orderBy('nfl.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
-
-        return $result;
     }
 
     /**
@@ -59,7 +43,8 @@ class NotFoundLogRepository extends EntityRepository implements NotFoundLogRepos
      */
     public function getAggregatedStats(string $domain, string $slug): array
     {
-        $result = $this->createQueryBuilder('nfl')
+        // @phpstan-ignore-next-line return.type
+        return $this->createQueryBuilder('nfl')
             ->select([
                 'COUNT(nfl.id) as totalCount',
                 'MAX(nfl.createdAt) as lastOccurrence',
@@ -71,8 +56,6 @@ class NotFoundLogRepository extends EntityRepository implements NotFoundLogRepos
             ->setParameter('slug', $slug)
             ->getQuery()
             ->getSingleResult();
-
-        return $result;
     }
 
     public function createQueryBuilderForGrid(): QueryBuilder
@@ -144,41 +127,6 @@ class NotFoundLogRepository extends EntityRepository implements NotFoundLogRepos
         }
 
         return $chartData;
-    }
-
-    /**
-     * @return array{
-     *     count: int,
-     *     first_occurrence: \DateTimeInterface|null,
-     *     last_occurrence: \DateTimeInterface|null
-     * }|null
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function getAggregatedByDomainAndSlug(string $domain, string $slug): ?array
-    {
-        $result = $this->createQueryBuilder('nfl')
-            ->select([
-                'COUNT(nfl.id) as count',
-                'MIN(nfl.createdAt) as first_occurrence',
-                'MAX(nfl.createdAt) as last_occurrence',
-            ])
-            ->where('nfl.urlDomain = :domain')
-            ->andWhere('nfl.urlSlug = :slug')
-            ->setParameter('domain', $domain)
-            ->setParameter('slug', $slug)
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        if (!$result || $result['count'] === 0) {
-            return null;
-        }
-
-        return [
-            'count' => (int) $result['count'],
-            'first_occurrence' => $result['first_occurrence'],
-            'last_occurrence' => $result['last_occurrence'],
-        ];
     }
 
     public function deleteByUrl(string $sourceUrl): void

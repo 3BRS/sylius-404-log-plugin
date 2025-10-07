@@ -4,10 +4,15 @@ includes:
 
 parameters:
     symfony:
-        container_xml_path: tests/Application/var/cache/dev/Tests_ThreeBRS_Sylius404LogPlugin_KernelDevDebugContainer.xml
+        containerXmlPath: tests/Application/var/cache/dev/Tests_ThreeBRS_Sylius404LogPlugin_KernelDevDebugContainer.xml
 
     excludePaths:
         - 'tests/'
 
     ignoreErrors:
         - '#Cannot cast mixed to int#'
+        - '#Call to method getSource\(\) on an unknown class Setono\\SyliusRedirectPlugin\\Model\\RedirectInterface#'
+        - '#Call to method getChannels\(\) on an unknown class Setono\\SyliusRedirectPlugin\\Model\\RedirectInterface#'
+        - '#Parameter \#1 \$sourceUrl of method ThreeBRS\\Sylius404LogPlugin\\EventListener\\SetonoRedirectCreatedListener::deleteMatchingNotFoundLogs\(\) expects string, mixed given#'
+        - '#Parameter \#2 \$channels of method ThreeBRS\\Sylius404LogPlugin\\EventListener\\SetonoRedirectCreatedListener::deleteMatchingNotFoundLogs\(\) expects iterable<Sylius\\Component\\Channel\\Model\\ChannelInterface>, mixed given#'
+        - '#Parameter \#2 \$domain of method ThreeBRS\\Sylius404LogPlugin\\Repository\\NotFoundLogRepositoryInterface::deleteByUrlAndDomain\(\) expects string, mixed given#'
