@@ -66,6 +66,9 @@ phpstan:
 behat:
 	./bin-docker/docker-bash bin/behat.sh
 
+phpunit:
+	./bin-docker/php bin/phpunit
+
 ecs:
 	./bin-docker/docker-bash bin/ecs.sh
 
@@ -111,7 +114,7 @@ var:
 
 fixtures: schema-reset bare-fixtures var
 
-tests: static behat
+tests: static phpunit behat
 
 ci: init-tests tests
 
