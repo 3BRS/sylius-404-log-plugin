@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace Tests\ThreeBRS\Sylius404LogPlugin\Behat\Context\Setup;
 
 use Behat\Behat\Context\Context;
+use Behat\Gherkin\Node\TableNode;
 use Doctrine\ORM\EntityManagerInterface;
 use Sylius\Behat\Service\SharedStorageInterface;
 use ThreeBRS\Sylius404LogPlugin\Entity\NotFoundLog;
 
-final class NotFoundLogContext implements Context
+final readonly class NotFoundLogContext implements Context
 {
     public function __construct(
-        private readonly EntityManagerInterface $entityManager,
-        private readonly SharedStorageInterface $sharedStorage,
+        private EntityManagerInterface $entityManager,
+        private SharedStorageInterface $sharedStorage,
     ) {
     }
 
@@ -76,7 +77,7 @@ final class NotFoundLogContext implements Context
     /**
      * @Given there are the following 404 logs:
      */
-    public function thereAreTheFollowing404Logs(\Behat\Gherkin\Node\TableNode $table): void
+    public function thereAreTheFollowing404Logs(TableNode $table): void
     {
         foreach ($table->getHash() as $row) {
             $count = (int) ($row['count'] ?? 1);
@@ -97,7 +98,7 @@ final class NotFoundLogContext implements Context
         ?\DateTimeImmutable $createdAt = null,
         ?string $userAgent = null,
         ?string $queryString = null,
-    ): NotFoundLog {
+    ): void {
         $notFoundLog = new NotFoundLog();
         $notFoundLog->setUrlDomain($domain);
         $notFoundLog->setUrlSlug($urlSlug);
@@ -112,7 +113,5 @@ final class NotFoundLogContext implements Context
         $this->entityManager->flush();
 
         $this->sharedStorage->set('404_log', $notFoundLog);
-
-        return $notFoundLog;
     }
 }
