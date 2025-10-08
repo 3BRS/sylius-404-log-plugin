@@ -15,14 +15,14 @@ use Tests\ThreeBRS\Sylius404LogPlugin\Behat\Page\Admin\AggregatedLog\IndexPageIn
 use Tests\ThreeBRS\Sylius404LogPlugin\Behat\Page\Admin\NotFoundLog\IndexPageInterface;
 use Webmozart\Assert\Assert;
 
-final class Managing404LogsContext implements Context
+final readonly class Managing404LogsContext implements Context
 {
     public function __construct(
-        private readonly IndexPageInterface              $notFoundLogIndexPage,
-        private readonly AggregatedLogIndexPageInterface $aggregatedLogIndexPage,
-        private readonly DetailsPageInterface            $aggregatedLogDetailsPage,
-        private readonly NotificationCheckerInterface    $notificationChecker,
-        private readonly NotificationAccessorInterface   $notificationAccessor,
+        private IndexPageInterface              $notFoundLogIndexPage,
+        private AggregatedLogIndexPageInterface $aggregatedLogIndexPage,
+        private DetailsPageInterface            $aggregatedLogDetailsPage,
+        private NotificationCheckerInterface    $notificationChecker,
+        private NotificationAccessorInterface   $notificationAccessor,
     ) {
     }
 
