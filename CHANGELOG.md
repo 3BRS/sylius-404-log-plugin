@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v2.1.0 (2025-10-09)
+- Optimize SQL
+
 ## v2.0.1 (2025-10-09)
 - Hotfix with removal of invalid and unused Grid configuration
 

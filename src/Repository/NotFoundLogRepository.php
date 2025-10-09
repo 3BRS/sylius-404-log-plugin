@@ -58,6 +58,9 @@ class NotFoundLogRepository extends EntityRepository implements NotFoundLogRepos
             ->getSingleResult();
     }
 
+    /**
+     * @noinspection PhpUnused used by Sylius Grid
+     */
     public function createQueryBuilderForGrid(): QueryBuilder
     {
         // For standard grid, return a normal QueryBuilder
@@ -143,8 +146,8 @@ class NotFoundLogRepository extends EntityRepository implements NotFoundLogRepos
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->delete($this->getClassName(), 'nfl')
-           ->where('nfl.urlSlug = :sourceUrl')
-           ->andWhere('nfl.urlDomain = :domain')
+           ->where('nfl.urlDomain = :domain')
+           ->andWhere('nfl.urlSlug = :sourceUrl')
            ->setParameter('sourceUrl', $sourceUrl)
            ->setParameter('domain', $domain);
 
