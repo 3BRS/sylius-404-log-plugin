@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v2.0.1 (2025-10-09)
+- Hotfix with removal of invalid and unused Grid configuration
+
 ## v2.0.0 (2025-10-06)
 - Add support to Sylius 2
 - Drop support for Sylius 1.*
