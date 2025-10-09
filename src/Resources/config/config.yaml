@@ -63,41 +63,6 @@ sylius_grid:
                     delete:
                         type: delete
 
-        three_brs_sylius_admin_404_log_plugin_aggregated:
-            driver:
-                name: three_brs_sylius_404_log_plugin.grid.aggregated_log_data_provider
-            fields:
-                urlDomain:
-                    type: string
-                    label: three_brs_sylius_404_log_plugin.ui.url_domain
-                    sortable: false
-                urlSlug:
-                    type: string
-                    label: three_brs_sylius_404_log_plugin.ui.url_slug
-                    sortable: false
-                count:
-                    type: string
-                    label: three_brs_sylius_404_log_plugin.ui.count
-                    sortable: false
-                lastOccurrence:
-                    type: datetime
-                    label: three_brs_sylius_404_log_plugin.ui.last_occurrence
-                    sortable: false
-                    options:
-                        format: 'd.m.Y H:i:s'
-            actions:
-                item:
-                    show_details:
-                        type: show
-                        label: three_brs_sylius_404_log_plugin.ui.show_details
-                        options:
-                            link:
-                                route: three_brs_sylius_404_log_plugin_admin_aggregated_log_details
-                                parameters:
-                                    domain: resource.urlDomain
-                                    slug: resource.urlSlug
-
-
 # Sylius Fixtures configuration for plugin
 sylius_fixtures:
     suites:
