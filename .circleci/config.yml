@@ -5,20 +5,20 @@ workflows:
         jobs:
             # Sylius 2.1 - Symfony 7.4
             -   build:
-                    name: php-<<matrix.php_version>>-sylius-2.1-symfony-7.4
+                    name: php-8.3-sylius-2.1-symfony-7.4
                     matrix:
                         parameters:
                             sylius_version: [ "2.1" ]
-                            php_version: [ "8.2", "8.3", "8.4" ]
+                            php_version: [ "8.3" ]
                             symfony_version: [ "7.4" ]
 
             # Sylius 2.2 - Symfony 7.4
             -   build:
-                    name: php-<<matrix.php_version>>-sylius-2.2-symfony-7.4
+                    name: php-8.3-sylius-2.2-symfony-7.4
                     matrix:
                         parameters:
                             sylius_version: [ "2.2" ]
-                            php_version: [ "8.2", "8.3", "8.4" ]
+                            php_version: [ "8.3" ]
                             symfony_version: [ "7.4" ]
 
 jobs:
