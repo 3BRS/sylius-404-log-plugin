@@ -3,6 +3,8 @@ includes:
     - vendor/phpstan/phpstan-symfony/extension.neon
 
 parameters:
+    reportUnmatchedIgnoredErrors: false
+
     symfony:
         containerXmlPath: tests/Application/var/cache/dev/Tests_ThreeBRS_Sylius404LogPlugin_KernelDevDebugContainer.xml
 
@@ -16,3 +18,12 @@ parameters:
         - '#Parameter \#1 \$sourceUrl of method ThreeBRS\\Sylius404LogPlugin\\EventListener\\SetonoRedirectCreatedListener::deleteMatchingNotFoundLogs\(\) expects string, mixed given#'
         - '#Parameter \#2 \$channels of method ThreeBRS\\Sylius404LogPlugin\\EventListener\\SetonoRedirectCreatedListener::deleteMatchingNotFoundLogs\(\) expects iterable<Sylius\\Component\\Channel\\Model\\ChannelInterface>, mixed given#'
         - '#Parameter \#2 \$domain of method ThreeBRS\\Sylius404LogPlugin\\Repository\\NotFoundLogRepositoryInterface::deleteByUrlAndDomain\(\) expects string, mixed given#'
+        -
+            message: '#has parameter \$optionsNode with generic class#'
+            path: src/Fixture/NotFoundLogFixture.php
+        -
+            message: '#Call to method .* on an unknown class Symfony\\Component\\Config\\Definition\\Builder\\NodeBuilder#'
+            path: src/Fixture/NotFoundLogFixture.php
+        -
+            message: '#Cannot call method .* on mixed#'
+            path: src/Fixture/NotFoundLogFixture.php
