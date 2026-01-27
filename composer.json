@@ -102,6 +102,7 @@
 		"api-platform/metadata": "<4.2.0",
 		"sylius/twig-hooks": ">=0.9.0 <0.9.1",
 		"sylius/twig-extra": ">=0.9.0 <0.9.1",
+		"knplabs/knp-menu-bundle": "<3.5.0",
 		"babdev/pagerfanta-bundle": "<3.6.1",
 		"doctrine/collections": "<1.7.0",
 		"doctrine/data-fixtures": "<1.5.1",
