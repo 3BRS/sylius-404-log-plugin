@@ -97,16 +97,9 @@ class AggregatedLogController extends AbstractController
         $totalItems = count($countResults);
         $totalPages = ceil($totalItems / $limit);
 
-        // Add LIMIT for pagination (compatible with both MySQL and PostgreSQL)
+        // Add LIMIT for pagination (standard SQL syntax compatible with both MySQL and PostgreSQL)
         $offset = ($page - 1) * $limit;
-        $databasePlatform = $connection->getDatabasePlatform()->getName();
-
-        if ($databasePlatform === 'postgresql') {
-            $sql .= ' LIMIT ' . $limit . ' OFFSET ' . $offset;
-        } else {
-            // MySQL syntax (and most other databases)
-            $sql .= ' LIMIT ' . $offset . ', ' . $limit;
-        }
+        $sql .= ' LIMIT ' . $limit . ' OFFSET ' . $offset;
 
         // Get data for current page
         $dataStmt = $connection->prepare($sql);
