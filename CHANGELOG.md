@@ -2,6 +2,7 @@
 
 ## v2.2.0 (2025-01-27)
 - Add support for Sylius 2.1 and 2.2
+- Drop support for Sylius 2.0
 - Add support for PHP 8.4
 - Fix deprecated getDatabasePlatform()->getName() for DBAL 4 compatibility
 - Fix Behat tests configuration

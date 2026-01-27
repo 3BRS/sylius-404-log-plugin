@@ -6,7 +6,7 @@
 	"require": {
 		"php": "^8.2",
 		"ext-json": "*",
-		"sylius/sylius": "^2.0"
+		"sylius/sylius": "^2.1"
 	},
 	"require-dev": {
 		"behat/behat": "^v3.24.1",
@@ -111,7 +111,7 @@
 		"polishsymfonycommunity/symfony-mocker-container": "<1.0.6",
 		"symfony/framework-bundle": ">=5.4.0 <=5.4.20|>=6.0.0 <=6.0.16|>=6.1.0 <=6.1.8|>=6.2.0 <=6.2.2|6.2.8",
 		"symplify/easy-coding-standard": "<10.2.0",
-		"sylius/sylius": "<2.0.8",
+		"sylius/sylius": "<2.1.0",
 		"sylius/resource-bundle": "<1.13.0",
 		"twig/twig": "<2.14.7",
 		"webmozart/assert": "<1.11.0",
