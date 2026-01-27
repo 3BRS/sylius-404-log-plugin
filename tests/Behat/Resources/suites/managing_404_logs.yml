@@ -1,6 +1,7 @@
 default:
     suites:
         ui_managing_404_logs:
+            paths: [ features ]
             contexts:
                 - sylius.behat.context.hook.doctrine_orm
 
@@ -17,6 +18,3 @@ default:
                 - sylius.behat.context.ui.admin.notification
 
                 - tests.three_brs.sylius_404_log_plugin.behat.context.ui.admin.managing_404_logs
-
-            filters:
-                tags: "@managing_404_logs && @ui"

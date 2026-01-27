@@ -58,7 +58,7 @@ final readonly class NotFoundLogContext implements Context
      */
     public function thereAre404LogsFor(int $count, string $urlSlug, string $domain): void
     {
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $this->create404Log($domain, $urlSlug);
         }
     }
@@ -69,7 +69,7 @@ final readonly class NotFoundLogContext implements Context
     public function thereAre404LogsForCreatedDaysAgo(int $count, string $urlSlug, string $domain, int $daysAgo): void
     {
         $createdAt = new \DateTimeImmutable('-' . $daysAgo . ' days');
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $this->create404Log($domain, $urlSlug, $createdAt);
         }
     }
@@ -86,7 +86,7 @@ final readonly class NotFoundLogContext implements Context
             $userAgent = $row['user_agent'] ?? null;
             $queryString = $row['query_string'] ?? null;
 
-            for ($i = 0; $i < $count; $i++) {
+            for ($i = 0; $i < $count; ++$i) {
                 $this->create404Log($domain, $urlSlug, null, $userAgent, $queryString);
             }
         }

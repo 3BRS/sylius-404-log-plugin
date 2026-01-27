@@ -41,3 +41,6 @@ npm-debug.log
 ###< lexik/jwt-authentication-bundle ###
 
 .phpunit.result.cache
+
+# JetBrains terminal history (WSL artifact)
+*-history

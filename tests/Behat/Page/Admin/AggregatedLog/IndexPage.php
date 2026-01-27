@@ -44,7 +44,7 @@ final class IndexPage extends SymfonyPage implements IndexPageInterface
 
         foreach ($rows as $row) {
             $domainCell = $row->find('css', 'td:nth-child(1)');
-            $slugCell   = $row->find('css', 'td:nth-child(2)');
+            $slugCell = $row->find('css', 'td:nth-child(2)');
 
             if ($domainCell && $slugCell) {
                 if (trim($domainCell->getText()) === $domain && trim($slugCell->getText()) === $urlSlug) {
@@ -64,12 +64,12 @@ final class IndexPage extends SymfonyPage implements IndexPageInterface
 
         foreach ($rows as $row) {
             $domainCell = $row->find('css', 'td:nth-child(1)');
-            $slugCell   = $row->find('css', 'td:nth-child(2)');
-            $countCell  = $row->find('css', 'td:nth-child(3)');
+            $slugCell = $row->find('css', 'td:nth-child(2)');
+            $countCell = $row->find('css', 'td:nth-child(3)');
 
             if ($domainCell && $slugCell && $countCell) {
                 if (trim($domainCell->getText()) === $domain && trim($slugCell->getText()) === $urlSlug) {
-                    return (int)trim($countCell->getText());
+                    return (int) trim($countCell->getText());
                 }
             }
         }
@@ -98,7 +98,7 @@ final class IndexPage extends SymfonyPage implements IndexPageInterface
     public function filterByMinCount(int $minCount): void
     {
         $input = $this->getElement('min_count_filter');
-        $input->setValue((string)$minCount);
+        $input->setValue((string) $minCount);
         $form = $this->getDocument()->find('xpath', '//form[.//input[@name="minCount"]]');
         Assert::notNull($form, 'Filter form not found');
         $form->submit();
@@ -107,7 +107,7 @@ final class IndexPage extends SymfonyPage implements IndexPageInterface
     public function filterByMaxCount(int $maxCount): void
     {
         $input = $this->getElement('max_count_filter');
-        $input->setValue((string)$maxCount);
+        $input->setValue((string) $maxCount);
         $form = $this->getDocument()->find('xpath', '//form[.//input[@name="maxCount"]]');
         Assert::notNull($form, 'Filter form not found');
         $form->submit();
@@ -146,7 +146,7 @@ final class IndexPage extends SymfonyPage implements IndexPageInterface
 
         foreach ($rows as $row) {
             $domainCell = $row->find('css', 'td:nth-child(1)');
-            $slugCell   = $row->find('css', 'td:nth-child(2)');
+            $slugCell = $row->find('css', 'td:nth-child(2)');
 
             if ($domainCell && $slugCell) {
                 if (trim($domainCell->getText()) === $domain && trim($slugCell->getText()) === $urlSlug) {
@@ -161,8 +161,8 @@ final class IndexPage extends SymfonyPage implements IndexPageInterface
     protected function getDefinedElements(): array
     {
         return array_merge(parent::getDefinedElements(), [
-            'domain_filter'    => 'input[name="domain"]',
-            'url_path_filter'  => 'input[name="urlPath"]',
+            'domain_filter' => 'input[name="domain"]',
+            'url_path_filter' => 'input[name="urlPath"]',
             'min_count_filter' => 'input[name="minCount"]',
             'max_count_filter' => 'input[name="maxCount"]',
         ]);

@@ -18,11 +18,11 @@ use Webmozart\Assert\Assert;
 final readonly class Managing404LogsContext implements Context
 {
     public function __construct(
-        private IndexPageInterface              $notFoundLogIndexPage,
+        private IndexPageInterface $notFoundLogIndexPage,
         private AggregatedLogIndexPageInterface $aggregatedLogIndexPage,
-        private DetailsPageInterface            $aggregatedLogDetailsPage,
-        private NotificationCheckerInterface    $notificationChecker,
-        private NotificationAccessorInterface   $notificationAccessor,
+        private DetailsPageInterface $aggregatedLogDetailsPage,
+        private NotificationCheckerInterface $notificationChecker,
+        private NotificationAccessorInterface $notificationAccessor,
     ) {
     }
 
@@ -124,7 +124,7 @@ final readonly class Managing404LogsContext implements Context
     public function theAggregatedLogForShouldShowOccurrences(
         string $domain,
         string $urlSlug,
-        int    $count,
+        int $count,
     ): void {
         $actualCount = $this->aggregatedLogIndexPage->getOccurrenceCount($domain, $urlSlug);
         Assert::same(
@@ -242,7 +242,7 @@ final readonly class Managing404LogsContext implements Context
                          . implode(
                              ';',
                              array_map(
-                                 static fn(
+                                 static fn (
                                      NodeElement $nodeElement,
                                  ) => $nodeElement->getText(),
                                  $this->notificationAccessor->getMessageElements(),
