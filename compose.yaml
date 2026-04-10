@@ -29,8 +29,6 @@ services:
         depends_on:
             - mysql
 #            - postgres
-        networks:
-            - sylius
 
     nginx:
         build: ./.docker/nginx
@@ -40,8 +38,6 @@ services:
             - ./:/srv/sylius:delegated
         ports:
             - "${APP_HOST_MAPPING_PORT:-8080}:80"
-        networks:
-            - sylius
 
     mysql:
         image: mysql:8.0
@@ -55,8 +51,6 @@ services:
             # - or extends ports in docker-compose.override.yml
             # To find out used port use `docker ps` and look for PORTS column to see mapped host port, including IP it can be for example 0.0.0.0:32772 which is roughly equivalent to 127.0.0.1:32772 for internal network requests
             - "${MYSQL_HOST_MAPPING_PORT:-3306}:3306"
-        networks:
-            - sylius
 
 #    postgres:
 #        image: postgres:${POSTGRES_VERSION:-16}-alpine
@@ -68,12 +62,6 @@ services:
 #            - ${POSTGRES_PORT:-5432}:5432
 #        volumes:
 #            - database_data:/var/lib/postgresql/data:rw
-#        networks:
-#            - sylius
 
 # volumes:
 #    database_data:
-
-networks:
-    sylius:
-        driver: bridge

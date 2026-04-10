@@ -76,7 +76,8 @@
 			"phpstan/extension-installer": true,
 			"rector/extension-installer": true,
 			"symfony/flex": false,
-			"php-http/discovery": true
+			"php-http/discovery": true,
+			"rector/extension-installer": true
 		}
 	},
 	"scripts": {
