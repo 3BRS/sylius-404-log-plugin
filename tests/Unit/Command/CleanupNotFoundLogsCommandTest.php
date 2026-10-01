@@ -7,7 +7,6 @@ namespace Tests\ThreeBRS\Sylius404LogPlugin\Unit\Command;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use ThreeBRS\Sylius404LogPlugin\Command\CleanupNotFoundLogsCommand;
@@ -29,9 +28,6 @@ class CleanupNotFoundLogsCommandTest extends TestCase
             $this->mockRepository,
             $this->mockEntityManager
         );
-
-        $application = new Application();
-        $application->add($this->command);
 
         $this->commandTester = new CommandTester($this->command);
     }

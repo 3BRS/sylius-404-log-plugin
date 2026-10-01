@@ -62,6 +62,8 @@ sylius_grid:
                 item:
                     delete:
                         type: delete
+                        label: sylius.ui.delete
+                        icon: tabler:trash-x
 
 # Sylius Fixtures configuration for plugin
 sylius_fixtures:

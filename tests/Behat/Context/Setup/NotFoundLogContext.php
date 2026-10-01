@@ -6,6 +6,7 @@ namespace Tests\ThreeBRS\Sylius404LogPlugin\Behat\Context\Setup;
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
 use Doctrine\ORM\EntityManagerInterface;
 use Sylius\Behat\Service\SharedStorageInterface;
 use ThreeBRS\Sylius404LogPlugin\Entity\NotFoundLog;
@@ -18,9 +19,7 @@ final readonly class NotFoundLogContext implements Context
     ) {
     }
 
-    /**
-     * @Given there are no 404 logs in the database
-     */
+    #[Given('there are no 404 logs in the database')]
     public function thereAreNo404LogsInTheDatabase(): void
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
@@ -29,33 +28,25 @@ final readonly class NotFoundLogContext implements Context
         $this->entityManager->clear();
     }
 
-    /**
-     * @Given there is a 404 log for :urlSlug on domain :domain
-     */
+    #[Given('there is a 404 log for :urlSlug on domain :domain')]
     public function thereIsA404LogFor(string $urlSlug, string $domain): void
     {
         $this->create404Log($domain, $urlSlug);
     }
 
-    /**
-     * @Given there is a 404 log for :urlSlug on domain :domain with user agent :userAgent
-     */
+    #[Given('there is a 404 log for :urlSlug on domain :domain with user agent :userAgent')]
     public function thereIsA404LogForWithUserAgent(string $urlSlug, string $domain, string $userAgent): void
     {
         $this->create404Log($domain, $urlSlug, userAgent: $userAgent);
     }
 
-    /**
-     * @Given there is a 404 log for :urlSlug on domain :domain with query string :queryString
-     */
+    #[Given('there is a 404 log for :urlSlug on domain :domain with query string :queryString')]
     public function thereIsA404LogForWithQueryString(string $urlSlug, string $domain, string $queryString): void
     {
         $this->create404Log($domain, $urlSlug, queryString: $queryString);
     }
 
-    /**
-     * @Given there are :count 404 logs for :urlSlug on domain :domain
-     */
+    #[Given('there are :count 404 logs for :urlSlug on domain :domain')]
     public function thereAre404LogsFor(int $count, string $urlSlug, string $domain): void
     {
         for ($i = 0; $i < $count; ++$i) {
@@ -63,9 +54,7 @@ final readonly class NotFoundLogContext implements Context
         }
     }
 
-    /**
-     * @Given there are :count 404 logs for :urlSlug on domain :domain created :daysAgo days ago
-     */
+    #[Given('there are :count 404 logs for :urlSlug on domain :domain created :daysAgo days ago')]
     public function thereAre404LogsForCreatedDaysAgo(int $count, string $urlSlug, string $domain, int $daysAgo): void
     {
         $createdAt = new \DateTimeImmutable('-' . $daysAgo . ' days');
@@ -74,9 +63,7 @@ final readonly class NotFoundLogContext implements Context
         }
     }
 
-    /**
-     * @Given there are the following 404 logs:
-     */
+    #[Given('there are the following 404 logs:')]
     public function thereAreTheFollowing404Logs(TableNode $table): void
     {
         foreach ($table->getHash() as $row) {

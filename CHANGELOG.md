@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v2.3.0 (2026-10-01)
+- Add support for Sylius 2.3
+- Add support for Symfony 8
+
 ## v2.2.0 (2025-01-27)
 - Add support for Sylius 2.1 and 2.2
 - Drop support for Sylius 2.0
