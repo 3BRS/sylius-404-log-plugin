@@ -47,7 +47,7 @@ class SetonoFormScriptListener implements EventSubscriberInterface
         $response = $event->getResponse();
 
         // Check if this is the Setono redirect create page
-        if ($request->get('_route') === 'setono_sylius_redirect_admin_redirect_create' &&
+        if ($request->attributes->get('_route') === 'setono_sylius_redirect_admin_redirect_create' &&
             $response->getStatusCode() === Response::HTTP_OK) {
             $content = (string) $response->getContent();
 

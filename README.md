@@ -42,6 +42,14 @@ The plugin adds a new "404 Logs" section to your Sylius admin panel where you ca
 - View error statistics and trends
 <img src="doc/detail.png" />
 
+## Requirements
+
+| Package | Version         |
+|---------|-----------------|
+| PHP     | ^8.2            |
+| Sylius  | ^2.1            |
+| Symfony | ^7.4 \|\| ^8.0  |
+
 ## Installation
 
 1. Run `composer require 3brs/sylius-404-log-plugin`.
